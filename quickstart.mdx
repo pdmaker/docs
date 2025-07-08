@@ -1,97 +1,268 @@
 ---
-title: 'Quickstart'
-description: 'Start building awesome documentation in under 5 minutes'
+title: '快速开始'
+description: '3分钟上手API易，开始调用200+AI大模型'
 ---
 
-## Setup your development
+# 快速开始
 
-Learn how to update your docs locally and deploy them to the public.
+欢迎使用API易！本指南将帮助你在3分钟内完成账号注册、充值、获取API Key并成功调用第一个AI模型。
 
-### Edit and preview
+## 🚀 第一步：注册账号
+
+<Steps>
+  <Step title="访问官网">
+    前往 [API易官网](https://lp.apiyi.com) 点击"立即免费注册"
+  </Step>
+  <Step title="创建账号">
+    填写邮箱和密码，完成注册。每个用户都可获得300万Token免费测试额度
+  </Step>
+  <Step title="验证邮箱">
+    查收邮件并点击验证链接激活账号
+  </Step>
+</Steps>
+
+## 💰 第二步：充值账户
 
 <AccordionGroup>
-  <Accordion icon="github" title="Clone your docs locally">
-    During the onboarding process, we created a repository on your Github with
-    your docs content. You can find this repository on our
-    [dashboard](https://dashboard.mintlify.com). To clone the repository
-    locally, follow these
-    [instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-    in your terminal.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Preview changes">
-    Previewing helps you make sure your changes look as intended. We built a
-    command line interface to render these changes locally. 
-    1. Install the
-    [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the
-    documentation changes locally with this command: ``` npm i -g mintlify ```
-    2. Run the following command at the root of your documentation (where
-    `docs.json` is): ``` mintlify dev ```
+  <Accordion icon="credit-card" title="充值方式">
+    登录后进入"充值"页面，支持多种充值方式：
+    - 支付宝
+    - 微信支付
+    - 银行卡
+    
     <Note>
-      If you’re currently using the legacy ```mint.json``` configuration file, please update the Mintlify CLI:
-
-
-      ```npm i -g mintlify@latest```
-      And run the new upgrade command in your docs repository:
-
-      ```mintlify upgrade```
-      You should now be using the new ```docs.json``` configuration file. Feel free to delete the ```mint.json``` file from your repository.
+      首次充值还可获得1美元额外赠送！确保账户余额 > 0 才能正常使用API服务。
     </Note>
   </Accordion>
+  <Accordion icon="calculator" title="费用说明">
+    API易的费率与OpenAI官方保持一致，部分模型更有价格优势：
+    - 官转模型约官网八折
+    - GPT-4o图片生成仅$0.01/张
+    - 具体费率请查看[价格页面](https://lp.apiyi.com/#pricing)
+  </Accordion>
 </AccordionGroup>
 
-### Deploy your changes
+## 🔑 第三步：获取API Key
 
-<AccordionGroup>
+<Steps>
+  <Step title="进入Keys页面">
+    登录后台，点击左侧导航栏的"Keys"进入API密钥管理页面
+  </Step>
+  <Step title="创建API Key">
+    点击"创建新密钥"，填写密钥名称（新手建议只填Key名称，其他选项使用默认值）
+  </Step>
+  <Step title="复制密钥">
+    创建成功后，复制并**安全保存**你的API Key，格式为：`sk-***`
+    
+    <Warning>
+      请妥善保管API Key，不要在代码中硬编码，建议使用环境变量存储
+    </Warning>
+  </Step>
+</Steps>
 
-<Accordion icon="message-bot" title="Install our Github app">
-  Our Github app automatically deploys your changes to your docs site, so you
-  don't need to manage deployments yourself. You can find the link to install on
-  your [dashboard](https://dashboard.mintlify.com). Once the bot has been
-  successfully installed, there should be a check mark next to the commit hash
-  of the repo.
-</Accordion>
-<Accordion icon="rocket" title="Push your changes">
-  [Commit and push your changes to
-  Git](https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository#about-git-push)
-  for your changes to update in your docs site. If you push and don't see that
-  the Github app successfully deployed your changes, you can also manually
-  update your docs through our [dashboard](https://dashboard.mintlify.com).
-</Accordion>
+## 🎯 第四步：第一个API调用
 
-</AccordionGroup>
+现在你可以开始调用AI模型了！API易完全兼容OpenAI API格式，只需替换接口地址即可。
 
-## Update your docs
+### 获取中转信息
 
-Add content directly in your files with MDX syntax and React components. You can use any of our components, or even build your own.
+- **稳定中转地址**：`https://vip.apiyi.com`
+- **API Key**：你刚才创建的 `sk-***`
+- **备用地址**：`https://api.apiyi.com`（新功能测试专用）
 
-<CardGroup>
+### 调用示例
 
-<Card title="Add Content With MDX" icon="file" href="/essentials/markdown">
-  Add content to your docs with MDX syntax.
+<CodeGroup>
+
+```bash cURL
+curl https://vip.apiyi.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4o-mini",
+    "messages": [
+      {"role": "user", "content": "你好，请介绍一下API易平台"}
+    ],
+    "max_tokens": 150
+  }'
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://vip.apiyi.com/v1'
+});
+
+const completion = await openai.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: [
+    {role: 'user', content: '你好，请介绍一下API易平台'}
+  ],
+  max_tokens: 150
+});
+
+console.log(completion.choices[0].message.content);
+```
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://vip.apiyi.com/v1"
+)
+
+completion = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "你好，请介绍一下API易平台"}
+    ],
+    max_tokens=150
+)
+
+print(completion.choices[0].message.content)
+```
+
+```go Go
+package main
+
+import (
+    "context"
+    "fmt"
+    "github.com/sashabaranov/go-openai"
+)
+
+func main() {
+    config := openai.DefaultConfig("YOUR_API_KEY")
+    config.BaseURL = "https://vip.apiyi.com/v1"
+    
+    client := openai.NewClientWithConfig(config)
+    
+    resp, err := client.CreateChatCompletion(
+        context.Background(),
+        openai.ChatCompletionRequest{
+            Model: openai.GPT4oMini,
+            Messages: []openai.ChatCompletionMessage{
+                {
+                    Role:    openai.ChatMessageRoleUser,
+                    Content: "你好，请介绍一下API易平台",
+                },
+            },
+            MaxTokens: 150,
+        },
+    )
+    
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    
+    fmt.Println(resp.Choices[0].Message.Content)
+}
+```
+
+</CodeGroup>
+
+### 常见URL配置
+
+在一些第三方软件或平台输入自定义URL时，可能需要不同的格式：
+
+- `https://vip.apiyi.com`
+- `https://vip.apiyi.com/v1`（最常见）
+- `https://vip.apiyi.com/v1/chat/completions`
+
+## 🔄 切换不同模型
+
+API易支持200+AI模型，只需修改`model`参数即可切换：
+
+```json
+{
+  "model": "gpt-4o",              // OpenAI GPT-4o
+  "model": "claude-3-5-sonnet",   // Claude 3.5 Sonnet
+  "model": "gemini-pro",          // Google Gemini Pro
+  "model": "deepseek-chat",       // DeepSeek Chat
+  "model": "qwen-turbo"           // 阿里通义千问
+}
+```
+
+<Card title="查看所有支持的模型" icon="list" href="/models">
+  点击查看完整的模型列表和调用参数
 </Card>
 
-<Card
-  title="Add Code Blocks"
-  icon="square-code"
-  href="/essentials/code"
->
-  Add code directly to your docs with syntax highlighting.
-</Card>
+## 🛠️ 第三方工具集成
 
-<Card
-  title="Add Images"
-  icon="image"
-  href="/essentials/images"
->
-  Add images to your docs to make them more engaging.
-</Card>
+API易可以无缝集成到各种AI工具中：
 
-<Card
-  title="Add Custom Components"
-  icon="puzzle-piece"
-  href="/essentials/reusable-snippets"
->
-  Add templates to your docs to make them more reusable.
-</Card>
-
+<CardGroup cols={2}>
+  <Card
+    title="Cursor"
+    icon="code"
+    href="/api-reference/cursor"
+  >
+    在Cursor中配置API易，享受AI编程助手
+  </Card>
+  <Card
+    title="沉浸式翻译"
+    icon="language"
+    href="/api-reference/applications"
+  >
+    在沉浸式翻译中使用API易提供的翻译服务
+  </Card>
+  <Card
+    title="Lobe Chat"
+    icon="comments"
+    href="/api-reference/applications"
+  >
+    在Lobe Chat中接入API易的AI对话服务
+  </Card>
+  <Card
+    title="Langchain"
+    icon="link"
+    href="/api-reference/langchain"
+  >
+    在Langchain项目中使用API易的AI能力
+  </Card>
 </CardGroup>
+
+## 📊 查看使用统计
+
+<Steps>
+  <Step title="访问控制台">
+    登录 [API易控制台](https://vip.apiyi.com) 查看详细的使用统计
+  </Step>
+  <Step title="查看日志">
+    在"日志"页面可以查看每次API调用的详细记录和消费情况
+  </Step>
+  <Step title="余额管理">
+    实时查看账户余额，并可以随时充值
+  </Step>
+</Steps>
+
+## 🆘 遇到问题？
+
+<CardGroup cols={2}>
+  <Card
+    title="常见问题"
+    icon="question"
+    href="https://lp.apiyi.com/#faq"
+  >
+    查看常见问题解答，快速解决疑问
+  </Card>
+  <Card
+    title="联系支持"
+    icon="envelope"
+    href="mailto:support@apiyi.com"
+  >
+    遇到技术问题？联系我们的支持团队
+  </Card>
+</CardGroup>
+
+---
+
+🎉 **恭喜！** 你已经成功完成了API易的快速开始流程。现在可以开始探索200+AI模型的强大能力了！
+
+<Note>
+  记住：API易提供300万Token免费测试额度，足够你充分体验各种AI模型的能力。
+</Note>

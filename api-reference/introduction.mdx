@@ -1,33 +1,294 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API参考'
+description: 'API易完整的接口文档和调用指南'
+---
+
+# API参考文档
+
+欢迎来到API易的API参考文档！这里提供了完整的接口文档、调用示例和最佳实践指南。
+
+## 🚀 API概览
+
+API易基于统一的**OpenAI API标准**构建，完全兼容OpenAI官方API格式。这意味着：
+
+- **无缝迁移**：现有OpenAI代码无需修改即可使用
+- **统一格式**：200+模型使用相同的调用格式
+- **丰富生态**：支持所有基于OpenAI API的第三方库和工具
+
+## 📋 基础信息
+
+### 服务地址
+- **主服务地址**：`https://vip.apiyi.com`
+- **备用地址**：`https://api.apiyi.com`
+
+### 认证方式
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+### Content-Type
+```bash
+Content-Type: application/json
+```
+
+## 🔑 快速开始
+
+### 1. 获取API Key
+前往 [API易官网](https://lp.apiyi.com) 注册并在控制台创建API Key
+
+### 2. 第一个API调用
+```bash
+curl https://vip.apiyi.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4o-mini",
+    "messages": [{"role": "user", "content": "Hello!"}],
+    "max_tokens": 100
+  }'
+```
+
+## 📚 核心接口
+
+<CardGroup cols={2}>
+  <Card
+    title="聊天对话"
+    icon="comments"
+    href="/api-reference/chat-completions"
+  >
+    chat/completions - 与AI模型进行对话交流
+  </Card>
+  <Card
+    title="模型列表"
+    icon="list"
+    href="/api-reference/models"
+  >
+    models - 获取可用模型列表和详细信息
+  </Card>
+  <Card
+    title="图片生成"
+    icon="image"
+    href="/api-reference/images"
+  >
+    images/generations - 使用AI生成图片
+  </Card>
+  <Card
+    title="语音合成"
+    icon="volume-up"
+    href="/api-reference/audio"
+  >
+    audio/speech - 将文本转换为语音
+  </Card>
+</CardGroup>
+
+## 🤖 模型指南
+
+不同的AI模型有不同的特点和适用场景：
+
+<CardGroup cols={2}>
+  <Card
+    title="OpenAI模型"
+    icon="openai"
+    href="/api-reference/openai"
+  >
+    GPT-4o、GPT-4、O1系列使用指南
+  </Card>
+  <Card
+    title="Claude模型"
+    icon="anthropic"
+    href="/api-reference/claude"
+  >
+    Claude 3.5 Sonnet、Opus、Haiku使用指南
+  </Card>
+  <Card
+    title="Gemini模型"
+    icon="google"
+    href="/api-reference/gemini"
+  >
+    Gemini 1.5 Pro、Flash、Pro Vision使用指南
+  </Card>
+  <Card
+    title="国产大模型"
+    icon="language"
+    href="/api-reference/chinese-models"
+  >
+    通义千问、DeepSeek、GLM、文心一言使用指南
+  </Card>
+</CardGroup>
+
+## 🔧 第三方集成
+
+API易可以无缝集成到各种开发工具和应用中：
+
+<CardGroup cols={3}>
+  <Card
+    title="Langchain"
+    icon="link"
+    href="/api-reference/langchain"
+  >
+    在Langchain中使用API易服务
+  </Card>
+  <Card
+    title="Cursor"
+    icon="code"
+    href="/api-reference/cursor"
+  >
+    在Cursor中配置API易
+  </Card>
+  <Card
+    title="其他应用"
+    icon="puzzle-piece"
+    href="/api-reference/applications"
+  >
+    沉浸式翻译、Lobe Chat等应用集成
+  </Card>
+</CardGroup>
+
+## 📊 HTTP状态码
+
+| 状态码 | 含义 | 说明 |
+|--------|------|------|
+| 200 | 成功 | 请求成功处理 |
+| 400 | 请求错误 | 参数错误或格式不正确 |
+| 401 | 认证失败 | API Key无效或过期 |
+| 403 | 权限不足 | API Key权限不足 |
+| 429 | 请求过多 | 触发频率限制 |
+| 500 | 服务器错误 | 服务器内部错误 |
+
+## 🚨 错误处理
+
+### 错误响应格式
+```json
+{
+  "error": {
+    "message": "错误描述",
+    "type": "invalid_request_error",
+    "param": "参数名",
+    "code": "错误代码"
+  }
+}
+```
+
+### 常见错误
+<AccordionGroup>
+  <Accordion icon="exclamation-triangle" title="认证错误">
+    ```json
+    {
+      "error": {
+        "message": "Invalid API key provided",
+        "type": "invalid_request_error",
+        "code": "invalid_api_key"
+      }
+    }
+    ```
+    **解决方案**：检查API Key是否正确，确保格式为`sk-xxx`
+  </Accordion>
+  <Accordion icon="exclamation-triangle" title="余额不足">
+    ```json
+    {
+      "error": {
+        "message": "You exceeded your current quota",
+        "type": "insufficient_quota",
+        "code": "quota_exceeded"
+      }
+    }
+    ```
+    **解决方案**：前往控制台充值账户余额
+  </Accordion>
+  <Accordion icon="exclamation-triangle" title="模型不存在">
+    ```json
+    {
+      "error": {
+        "message": "The model does not exist",
+        "type": "invalid_request_error",
+        "param": "model",
+        "code": "model_not_found"
+      }
+    }
+    ```
+    **解决方案**：检查模型名称是否正确，参考[模型列表](/models)
+  </Accordion>
+</AccordionGroup>
+
+## 🔒 安全最佳实践
+
+<Warning>
+  **重要提醒**：请务必遵循以下安全原则，确保API Key和数据安全
+</Warning>
+
+### API Key安全
+- ✅ 使用环境变量存储API Key
+- ✅ 定期轮换API Key
+- ✅ 为不同项目使用不同的API Key
+- ❌ 不要在客户端代码中硬编码API Key
+- ❌ 不要将API Key提交到版本控制系统
+
+### 示例：环境变量配置
+```bash
+# .env文件
+APIYI_API_KEY=sk-your-api-key-here
+APIYI_BASE_URL=https://vip.apiyi.com/v1
+```
+
+```python
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.getenv("APIYI_API_KEY"),
+    base_url=os.getenv("APIYI_BASE_URL")
+)
+```
+
+## 📈 请求限制
+
+### 频率限制
+- **免费用户**：每分钟60次请求
+- **付费用户**：每分钟600次请求
+- **企业用户**：无限制
+
+### 并发限制
+- **标准版**：最高100并发
+- **专业版**：最高500并发
+- **企业版**：无限制
+
+## 🔍 调试工具
+
+### 请求日志
+在控制台的"日志"页面可以查看：
+- 请求详情
+- 响应内容
+- 错误信息
+- 使用统计
+
+### 测试工具
+```bash
+# 使用curl测试连接
+curl -X GET https://vip.apiyi.com/v1/models \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+## 📞 获取帮助
+
+<CardGroup cols={2}>
+  <Card
+    title="技术支持"
+    icon="envelope"
+    href="mailto:support@apiyi.com"
+  >
+    遇到技术问题？联系我们的技术支持团队
+  </Card>
+  <Card
+    title="常见问题"
+    icon="question"
+    href="https://lp.apiyi.com/#faq"
+  >
+    查看常见问题解答和故障排除指南
+  </Card>
+</CardGroup>
+
 ---
 
 <Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
+  API易致力于提供稳定、高效的AI模型接口服务。如果你在使用过程中遇到任何问题，请及时联系我们的支持团队。
 </Note>
-
-## Welcome
-
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
-
-## Authentication
-
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
-
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
-```

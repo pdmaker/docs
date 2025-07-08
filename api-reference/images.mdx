@@ -1,0 +1,637 @@
+---
+title: 'Images API'
+description: 'AI图片生成接口，GPT-4o Image仅$0.01/张'
+---
+
+# Images API
+
+API易的图片生成服务支持多种AI图像生成模型，包括OpenAI DALL-E、Flux、Midjourney、Stable Diffusion等。特别是我们的**GPT-4o Image价格屠夫仅$0.01/张**，提供超高性价比的AI图片生成服务。
+
+## 🎨 核心优势
+
+<CardGroup cols={2}>
+  <Card
+    title="价格屠夫"
+    icon="dollar-sign"
+    href="#gpt-4o-image"
+  >
+    GPT-4o Image仅$0.01/张，比官方便宜数倍
+  </Card>
+  <Card
+    title="多模型支持"
+    icon="palette"
+    href="#supported-models"
+  >
+    支持DALL-E、Flux、Midjourney等10+图像模型
+  </Card>
+  <Card
+    title="高并发支持"
+    icon="zap"
+    href="#performance"
+  >
+    日产数万张图片，支持生产环境大规模使用
+  </Card>
+  <Card
+    title="即开即用"
+    icon="plug"
+    href="#getting-started"
+  >
+    完全兼容OpenAI格式，无需修改代码
+  </Card>
+</CardGroup>
+
+## 接口信息
+
+**接口地址**：`POST https://vip.apiyi.com/v1/images/generations`
+
+**兼容性**：完全兼容OpenAI官方API格式
+
+## 请求参数
+
+### 必需参数
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `model` | string | 图像生成模型，如 `dall-e-3`、`gpt-4o-image` |
+| `prompt` | string | 图像描述提示词，建议使用英文 |
+
+### 可选参数
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `n` | integer | 1 | 生成图片数量 (1-10) |
+| `size` | string | "1024x1024" | 图片尺寸 |
+| `quality` | string | "standard" | 图片质量：standard/hd |
+| `style` | string | "vivid" | 图片风格：vivid/natural |
+| `response_format` | string | "url" | 响应格式：url/b64_json |
+| `user` | string | null | 用户标识符 |
+
+### 支持的尺寸
+
+不同模型支持的尺寸规格：
+
+| 模型 | 支持尺寸 |
+|------|----------|
+| DALL-E 3 | 1024x1024, 1024x1792, 1792x1024 |
+| DALL-E 2 | 256x256, 512x512, 1024x1024 |
+| GPT-4o Image | 1024x1024, 1024x1792, 1792x1024 |
+| Flux 系列 | 1024x1024, 768x1344, 1344x768 |
+| Midjourney | 1024x1024, 1152x896, 896x1152 |
+
+## 基础使用示例
+
+<CodeGroup>
+
+```bash cURL
+curl https://vip.apiyi.com/v1/images/generations \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4o-image",
+    "prompt": "A beautiful sunset over mountains with a lake in the foreground",
+    "n": 1,
+    "size": "1024x1024",
+    "quality": "hd"
+  }'
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://vip.apiyi.com/v1'
+});
+
+async function generateImage() {
+  const image = await openai.images.generate({
+    model: 'gpt-4o-image',
+    prompt: 'A beautiful sunset over mountains with a lake in the foreground',
+    n: 1,
+    size: '1024x1024',
+    quality: 'hd'
+  });
+
+  console.log(image.data[0].url);
+}
+
+generateImage();
+```
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://vip.apiyi.com/v1"
+)
+
+response = client.images.generate(
+    model="gpt-4o-image",
+    prompt="A beautiful sunset over mountains with a lake in the foreground",
+    n=1,
+    size="1024x1024",
+    quality="hd"
+)
+
+print(response.data[0].url)
+```
+
+```go Go
+package main
+
+import (
+    "context"
+    "fmt"
+    "github.com/sashabaranov/go-openai"
+)
+
+func main() {
+    config := openai.DefaultConfig("YOUR_API_KEY")
+    config.BaseURL = "https://vip.apiyi.com/v1"
+    
+    client := openai.NewClientWithConfig(config)
+    
+    resp, err := client.CreateImage(
+        context.Background(),
+        openai.ImageRequest{
+            Model:   "gpt-4o-image",
+            Prompt:  "A beautiful sunset over mountains with a lake in the foreground",
+            N:       1,
+            Size:    openai.CreateImageSize1024x1024,
+            Quality: openai.CreateImageQualityHD,
+        },
+    )
+    
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    
+    fmt.Println(resp.Data[0].URL)
+}
+```
+
+</CodeGroup>
+
+## 响应格式
+
+### 标准响应
+
+```json
+{
+  "created": 1702855400,
+  "data": [
+    {
+      "url": "https://image-url.com/generated-image.png",
+      "revised_prompt": "A beautiful sunset over mountains with a clear lake in the foreground, painted in vibrant colors with dramatic lighting"
+    }
+  ]
+}
+```
+
+### 响应字段说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `created` | integer | 创建时间戳 |
+| `data` | array | 生成的图片数组 |
+| `url` | string | 图片访问链接 |
+| `revised_prompt` | string | 修订后的提示词（部分模型支持） |
+
+## 支持的模型详情
+
+### 🔥 GPT-4o Image (推荐)
+
+<Note>
+  **价格屠夫**：仅$0.01/张，比官方便宜数倍，质量效果惊人！
+</Note>
+
+```json
+{
+  "model": "gpt-4o-image",
+  "prompt": "A futuristic city skyline at night with neon lights",
+  "size": "1024x1024",
+  "quality": "hd"
+}
+```
+
+**特点：**
+- ✅ 超低价格：$0.01/张
+- ✅ 高质量输出
+- ✅ 支持多种尺寸
+- ✅ 快速生成
+- ✅ 企业级稳定性
+
+### DALL-E 3
+
+OpenAI最新的图像生成模型，擅长理解复杂提示词：
+
+```json
+{
+  "model": "dall-e-3",
+  "prompt": "A serene Japanese garden with cherry blossoms, painted in watercolor style",
+  "size": "1024x1024",
+  "quality": "hd",
+  "style": "vivid"
+}
+```
+
+**价格：** $0.04/张 (1024x1024)
+
+### DALL-E 2
+
+经典的DALL-E模型，性价比较高：
+
+```json
+{
+  "model": "dall-e-2",
+  "prompt": "A cute robot playing with a cat in a sunny garden",
+  "size": "1024x1024"
+}
+```
+
+**价格：** $0.02/张 (1024x1024)
+
+### Flux 系列
+
+<AccordionGroup>
+  <Accordion icon="zap" title="Flux Pro">
+    最高质量的Flux模型
+    
+    ```json
+    {
+      "model": "flux-pro",
+      "prompt": "Portrait of a wise old wizard with magical aura",
+      "size": "1024x1024"
+    }
+    ```
+    
+    **价格：** $0.05/张
+  </Accordion>
+  
+  <Accordion icon="code" title="Flux Dev">
+    开发版本，平衡质量和速度
+    
+    ```json
+    {
+      "model": "flux-dev",
+      "prompt": "A modern abstract art piece with geometric shapes",
+      "size": "1024x1024"
+    }
+    ```
+    
+    **价格：** $0.03/张
+  </Accordion>
+  
+  <Accordion icon="rocket" title="Flux Schnell">
+    快速生成版本
+    
+    ```json
+    {
+      "model": "flux-schnell",
+      "prompt": "A simple line drawing of a flower",
+      "size": "1024x1024"
+    }
+    ```
+    
+    **价格：** $0.01/张
+  </Accordion>
+</AccordionGroup>
+
+### Midjourney 系列
+
+<AccordionGroup>
+  <Accordion icon="palette" title="Midjourney v6">
+    最新版本，艺术性最强
+    
+    ```json
+    {
+      "model": "midjourney-v6",
+      "prompt": "Ethereal fantasy landscape with floating islands and waterfalls",
+      "size": "1024x1024"
+    }
+    ```
+    
+    **价格：** $0.08/张
+  </Accordion>
+  
+  <Accordion icon="image" title="Midjourney v5">
+    经典版本，艺术风格多样
+    
+    ```json
+    {
+      "model": "midjourney-v5",
+      "prompt": "Cyberpunk cityscape with holographic advertisements",
+      "size": "1024x1024"
+    }
+    ```
+    
+    **价格：** $0.06/张
+  </Accordion>
+</AccordionGroup>
+
+### Stable Diffusion 系列
+
+<AccordionGroup>
+  <Accordion icon="wand-magic-sparkles" title="Stable Diffusion XL">
+    高分辨率开源模型
+    
+    ```json
+    {
+      "model": "stable-diffusion-xl",
+      "prompt": "Photorealistic portrait of a person in natural lighting",
+      "size": "1024x1024"
+    }
+    ```
+    
+    **价格：** $0.02/张
+  </Accordion>
+  
+  <Accordion icon="image" title="Stable Diffusion 1.5">
+    经典开源模型
+    
+    ```json
+    {
+      "model": "stable-diffusion-1.5",
+      "prompt": "Cartoon style illustration of a happy dog",
+      "size": "512x512"
+    }
+    ```
+    
+    **价格：** $0.01/张
+  </Accordion>
+</AccordionGroup>
+
+## 提示词优化技巧
+
+### 1. 基础结构
+
+好的提示词通常包含以下元素：
+
+```
+[主体] + [风格] + [环境] + [光照] + [质量描述符]
+```
+
+**示例：**
+```
+A majestic lion (主体) in photorealistic style (风格) standing in African savanna (环境) during golden hour lighting (光照), highly detailed, 8K resolution (质量描述符)
+```
+
+### 2. 风格关键词
+
+<AccordionGroup>
+  <Accordion icon="camera" title="摄影风格">
+    - `photorealistic`, `photograph`, `DSLR`
+    - `portrait photography`, `landscape photography`
+    - `macro photography`, `street photography`
+    - `black and white`, `vintage film`
+  </Accordion>
+  
+  <Accordion icon="palette" title="艺术风格">
+    - `oil painting`, `watercolor`, `digital art`
+    - `impressionist`, `abstract`, `minimalist`
+    - `manga style`, `anime style`, `cartoon`
+    - `sketch`, `pencil drawing`, `charcoal`
+  </Accordion>
+  
+  <Accordion icon="sparkles" title="质量描述符">
+    - `highly detailed`, `ultra realistic`, `8K resolution`
+    - `sharp focus`, `professional lighting`
+    - `award winning`, `masterpiece`
+    - `trending on artstation`
+  </Accordion>
+</AccordionGroup>
+
+### 3. 模型特定优化
+
+<CodeGroup>
+
+```text DALL-E 3
+# DALL-E 3 擅长理解自然语言描述
+"Create an image of a cozy coffee shop interior on a rainy day, with warm lighting, people reading books, and steam rising from coffee cups. The atmosphere should be peaceful and inviting."
+```
+
+```text GPT-4o Image
+# GPT-4o Image 适合简洁有力的描述
+"Modern minimalist bedroom, white walls, natural lighting, scandinavian design, clean lines, wooden furniture, plants"
+```
+
+```text Midjourney
+# Midjourney 适合艺术化描述
+"ethereal fantasy forest, bioluminescent plants, mystical atmosphere, cinematic lighting, digital art masterpiece --style raw"
+```
+
+```text Flux
+# Flux 适合技术性描述
+"professional product photography, luxury watch on marble surface, studio lighting, high contrast, commercial grade, ultra sharp"
+```
+
+</CodeGroup>
+
+## 批量生成
+
+生成多张图片进行选择：
+
+```json
+{
+  "model": "gpt-4o-image",
+  "prompt": "A serene mountain landscape at sunrise",
+  "n": 4,
+  "size": "1024x1024"
+}
+```
+
+<Warning>
+  批量生成会按照单张价格乘以数量计费。建议先生成1-2张测试效果，满意后再批量生成。
+</Warning>
+
+## 高级功能
+
+### 图片变体生成
+
+基于现有图片生成变体（部分模型支持）：
+
+```json
+{
+  "model": "dall-e-2",
+  "image": "base64_encoded_image_data",
+  "n": 2,
+  "size": "1024x1024"
+}
+```
+
+### 图片编辑
+
+对现有图片进行局部编辑（部分模型支持）：
+
+```json
+{
+  "model": "dall-e-2",
+  "image": "base64_encoded_image_data",
+  "mask": "base64_encoded_mask_data",
+  "prompt": "A sunflower in the middle of the image",
+  "n": 1,
+  "size": "1024x1024"
+}
+```
+
+## 性能优化
+
+### 1. 选择合适的模型
+
+<CardGroup cols={2}>
+  <Card
+    title="追求性价比"
+    icon="dollar-sign"
+  >
+    推荐：GPT-4o Image ($0.01)、Flux Schnell ($0.01)
+  </Card>
+  <Card
+    title="追求质量"
+    icon="star"
+  >
+    推荐：DALL-E 3 ($0.04)、Flux Pro ($0.05)
+  </Card>
+  <Card
+    title="艺术创作"
+    icon="palette"
+  >
+    推荐：Midjourney v6 ($0.08)、Midjourney v5 ($0.06)
+  </Card>
+  <Card
+    title="快速原型"
+    icon="zap"
+  >
+    推荐：GPT-4o Image、Stable Diffusion 1.5
+  </Card>
+</CardGroup>
+
+### 2. 并发请求
+
+API易支持高并发图片生成：
+
+```python
+import asyncio
+import aiohttp
+
+async def generate_image(session, prompt):
+    async with session.post(
+        'https://vip.apiyi.com/v1/images/generations',
+        headers={'Authorization': 'Bearer YOUR_API_KEY'},
+        json={
+            'model': 'gpt-4o-image',
+            'prompt': prompt,
+            'size': '1024x1024'
+        }
+    ) as response:
+        return await response.json()
+
+async def batch_generate():
+    prompts = [
+        "A cat sitting on a windowsill",
+        "A dog playing in a park",
+        "A bird flying in the sky"
+    ]
+    
+    async with aiohttp.ClientSession() as session:
+        tasks = [generate_image(session, prompt) for prompt in prompts]
+        results = await asyncio.gather(*tasks)
+    
+    return results
+```
+
+## 价格对比
+
+| 模型 | API易价格 | 官方价格 | 节省比例 |
+|------|-----------|----------|----------|
+| GPT-4o Image | $0.01/张 | 无官方对应 | - |
+| DALL-E 3 (1024x1024) | $0.04/张 | $0.04/张 | 持平 |
+| DALL-E 2 (1024x1024) | $0.02/张 | $0.02/张 | 持平 |
+| Flux Pro | $0.05/张 | $0.10/张+ | 50%+ |
+| Midjourney v6 | $0.08/张 | $0.12/张+ | 33%+ |
+
+<Note>
+  价格可能因供应商调整而变化，最新价格以控制台显示为准。
+</Note>
+
+## 错误处理
+
+### 常见错误
+
+| 错误码 | 说明 | 解决方案 |
+|--------|------|----------|
+| 400 | 提示词违规或参数错误 | 检查提示词内容和参数格式 |
+| 401 | API Key无效 | 验证API Key是否正确 |
+| 429 | 请求过于频繁 | 降低请求频率，使用队列处理 |
+| 500 | 服务器错误 | 稍后重试或联系支持 |
+
+### 内容政策
+
+为确保服务稳定，请避免生成以下内容：
+- 暴力、血腥内容
+- 政治敏感内容
+- 色情、成人内容
+- 侵犯版权的内容
+- 涉及真实人物的不当内容
+
+## 最佳实践
+
+1. **提示词优化**：使用清晰、具体的描述
+2. **模型选择**：根据需求选择合适的模型
+3. **批量处理**：使用异步请求提高效率
+4. **成本控制**：优先使用性价比高的模型
+5. **质量把控**：生成多张图片进行筛选
+6. **缓存策略**：对重复请求进行缓存
+
+## 使用案例
+
+### 电商产品图
+
+```json
+{
+  "model": "gpt-4o-image",
+  "prompt": "Professional product photography of a modern smartphone on clean white background, studio lighting, commercial quality, highly detailed",
+  "size": "1024x1024",
+  "quality": "hd"
+}
+```
+
+### 社交媒体配图
+
+```json
+{
+  "model": "flux-dev",
+  "prompt": "Inspirational quote background, soft gradient colors, minimalist design, motivational atmosphere, clean typography space",
+  "size": "1024x1024"
+}
+```
+
+### 游戏美术素材
+
+```json
+{
+  "model": "midjourney-v6",
+  "prompt": "Fantasy RPG character concept art, female warrior with magical armor, detailed fantasy art style, game art quality",
+  "size": "1024x1024"
+}
+```
+
+---
+
+<CardGroup cols={2}>
+  <Card
+    title="开始使用"
+    icon="rocket"
+    href="/quickstart"
+  >
+    快速上手API易，开始生成你的第一张AI图片
+  </Card>
+  <Card
+    title="查看价格"
+    icon="dollar-sign"
+    href="https://lp.apiyi.com/#pricing"
+  >
+    查看详细的图片生成价格表和优惠政策
+  </Card>
+</CardGroup> 

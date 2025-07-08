@@ -1,55 +1,64 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "API易文档中心",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#2563eb",
+    "light": "#3b82f6",
+    "dark": "#1d4ed8"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "基础",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "开始使用",
             "pages": [
               "index",
               "quickstart",
-              "development"
+              "models"
             ]
           },
           {
-            "group": "Essentials",
+            "group": "开发指南",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
+              "development/authentication",
+              "development/error-handling",
+              "development/best-practices",
+              "development/rate-limits"
             ]
           }
         ]
       },
       {
-        "tab": "API Reference",
+        "tab": "API参考",
         "groups": [
           {
-            "group": "API Documentation",
+            "group": "核心接口",
             "pages": [
-              "api-reference/introduction"
+              "api-reference/introduction",
+              "api-reference/chat-completions",
+              "api-reference/models",
+              "api-reference/images"
             ]
           },
           {
-            "group": "Endpoint Examples",
+            "group": "模型指南",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/openai",
+              "api-reference/claude",
+              "api-reference/gemini",
+              "api-reference/chinese-models"
+            ]
+          },
+          {
+            "group": "第三方集成",
+            "pages": [
+              "api-reference/langchain",
+              "api-reference/cursor",
+              "api-reference/applications"
             ]
           }
         ]
@@ -58,19 +67,19 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "官方网站",
+          "href": "https://lp.apiyi.com",
+          "icon": "globe"
         },
         {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
+          "anchor": "价格",
+          "href": "https://lp.apiyi.com/#pricing",
+          "icon": "dollar-sign"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "支持",
+          "href": "mailto:support@apiyi.com",
+          "icon": "envelope"
         }
       ]
     }
@@ -82,21 +91,19 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "注册使用",
+        "href": "https://lp.apiyi.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "控制台",
+      "href": "https://vip.apiyi.com"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "website": "https://lp.apiyi.com"
     }
   }
 }

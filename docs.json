@@ -2,12 +2,21 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "API易文档中心",
+  "description": "企业级专业稳定的AI大模型API中转站，一个令牌、无限模型。支持OpenAI、Claude、Gemini、DeepSeek、Qwen等200+热门AI模型。",
+  "url": "https://docs.apiyi.com",
   "colors": {
     "primary": "#2563eb",
     "light": "#3b82f6",
     "dark": "#1d4ed8"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/logo.webp",
+  "modeToggle": {
+    "default": "light",
+    "isHidden": false
+  },
+  "seo": {
+    "indexHiddenPages": false
+  },
   "navigation": {
     "tabs": [
       {
@@ -66,26 +75,21 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "资源导航",
+        "groups": [
+          {
+            "group": "官方 API 文档",
+            "pages": [
+              "resources"
+            ]
+          }
+        ]
       }
     ],
     "global": {
-      "anchors": [
-        {
-          "anchor": "官方网站",
-          "href": "https://api.apiyi.com",
-          "icon": "globe"
-        },
-        {
-          "anchor": "价格",
-          "href": "https://api.apiyi.com/#pricing",
-          "icon": "dollar-sign"
-        },
-        {
-          "anchor": "支持",
-          "href": "mailto:support@apiyi.com",
-          "icon": "envelope"
-        }
-      ]
+      "anchors": []
     }
   },
   "logo": {
@@ -134,5 +138,29 @@
   "topAnchorOffset": 100,
   "sidebarConfig": {
     "collapsed": false
-  }
+  },
+  "metadata": {
+    "og:type": "website",
+    "og:title": "API易文档中心 - 企业级AI大模型API中转站",
+    "og:description": "支持200+热门AI模型，一个令牌调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。企业级专业稳定的AI API服务。",
+    "og:image": "/logo/logo.webp",
+    "og:url": "https://docs.apiyi.com",
+    "twitter:card": "summary_large_image",
+    "twitter:title": "API易文档中心 - 企业级AI大模型API中转站",
+    "twitter:description": "支持200+热门AI模型，一个令牌调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。",
+    "twitter:image": "/logo/logo.webp"
+  },
+  "integrations": {
+    "analytics": {
+      "ga4": {
+        "measurementId": "G-XXXXXXXXXX"
+      }
+    }
+  },
+  "redirects": [
+    {
+      "source": "/introduction",
+      "destination": "/"
+    }
+  ]
 }

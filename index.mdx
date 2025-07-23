@@ -1,5 +1,6 @@
 ---
-title: API易文档中心
+title: 基本介绍
+sidebarTitle: 基本介绍
 description: "企业级专业稳定的AI大模型API中转站，一个令牌、无限模型"
 ---
 
@@ -18,61 +19,255 @@ description: "企业级专业稳定的AI大模型API中转站，一个令牌、�
 
 **API易** 是企业级专业稳定的AI大模型API中转站，基于统一的OpenAI API标准，支持200+热门AI模型。一个令牌，即可轻松调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。
 
-## 🚀 快速开始
+## 📖 产品基础
 
 <CardGroup cols={2}>
   <Card
-    title="3分钟上手"
+    title="快速开始"
     icon="rocket"
-    href="/quickstart"
+    href="/getting-started"
   >
-    注册账号，获取API Key，立即开始调用AI模型
+    三步完成接入，立即开始使用 AI 模型
   </Card>
   <Card
-    title="模型列表"
-    icon="list"
-    href="/models"
+    title="API手册"
+    icon="book"
+    href="/api-manual"
   >
-    查看支持的200+AI模型，包括最新的GPT-4o、Claude 3.5等
+    完整的接口文档和开发者指南
   </Card>
 </CardGroup>
 
-## 🏆 为什么选择API易
+## 🔧 核心接口
 
 <CardGroup cols={2}>
   <Card
-    title="200+模型聚合"
-    icon="infinity"
-    href="/models"
+    title="对话补全 API"
+    icon="comments"
+    href="/api-reference/chat-completions"
   >
-    一个令牌调用所有主流AI模型，OpenAI、Claude、Gemini、DeepSeek、Qwen等
+    Chat Completions - 创建多轮对话和文本生成
   </Card>
   <Card
-    title="企业级稳定"
-    icon="shield-check"
-    href="/development/best-practices"
+    title="模型列表 API"
+    icon="list"
+    href="/api-reference/models"
   >
-    99.99%可用性，AWS/Azure/GCP官方合作伙伴，不限并发
+    Models API - 获取所有可用模型信息
   </Card>
   <Card
-    title="成本优势"
-    icon="dollar-sign"
-    href="https://lp.apiyi.com/#pricing"
+    title="图像生成 API"
+    icon="image"
+    href="/api-reference/images"
   >
-    官转模型约官网八折，GPT-4o图片生成仅$0.01/张
+    Images API - DALL·E 3、GPT-4o 图像生成
   </Card>
   <Card
-    title="无缝集成"
-    icon="plug"
-    href="/api-reference/introduction"
+    title="嵌入向量 API"
+    icon="vector-square"
+    href="/api-reference/embeddings"
   >
-    完全兼容OpenAI API，无需修改代码即可切换使用
+    Embeddings API - 文本向量化和语义搜索
   </Card>
 </CardGroup>
+
+## ⚡ API 能力
+
+<CardGroup cols={2}>
+  <Card
+    title="模型信息"
+    icon="database"
+    href="/api-capabilities/model-info"
+  >
+    查看支持的200+AI模型详细信息
+  </Card>
+  <Card
+    title="在 OpenAI 官方库使用"
+    icon="code"
+    href="/api-capabilities/openai-sdk"
+  >
+    使用官方 SDK 无缝接入 API易
+  </Card>
+  <Card
+    title="OpenAI Responses API"
+    icon="reply"
+    href="/api-capabilities/openai-responses"
+  >
+    兼容 OpenAI 响应格式的标准接口
+  </Card>
+  <Card
+    title="GPT-Image-1 图像生成"
+    icon="palette"
+    href="/gpt-image-1"
+  >
+    高性价比图像生成，仅需 $0.01/张
+  </Card>
+  <Card
+    title="图像编辑 API"
+    icon="image"
+    href="/image-edit"
+  >
+    使用 AI 编辑和修改现有图像
+  </Card>
+</CardGroup>
+
+## 🎯 使用场景
+
+### 对话型 AI
+
+<CardGroup cols={2}>
+  <Card
+    title="Cherry Studio"
+    icon="cherry"
+    href="/scenarios/chat/cherry-studio"
+  >
+    功能强大的 AI 对话客户端
+  </Card>
+  <Card
+    title="Open WebUI"
+    icon="globe"
+    href="/scenarios/chat/open-webui"
+  >
+    自托管的 Web 对话界面
+  </Card>
+  <Card
+    title="ChatGPT Next Web"
+    icon="window"
+    href="/scenarios/chat/chatgpt-next-web"
+  >
+    一键部署的网页版 ChatGPT
+  </Card>
+</CardGroup>
+
+### 编程开发
+
+<CardGroup cols={2}>
+  <Card
+    title="Cursor"
+    icon="cursor-arrow-ripple"
+    href="/scenarios/programming/cursor"
+  >
+    AI 驱动的代码编辑器
+  </Card>
+  <Card
+    title="Cline (VS Code)"
+    icon="code"
+    href="/scenarios/programming/cline"
+  >
+    VS Code 中的 AI 编程助手
+  </Card>
+</CardGroup>
+
+### 技术工程
+
+<CardGroup cols={2}>
+  <Card
+    title="LangChain"
+    icon="link"
+    href="/scenarios/engineering/langchain"
+  >
+    构建 AI 应用的开发框架
+  </Card>
+  <Card
+    title="Dify"
+    icon="workflow"
+    href="/scenarios/engineering/dify"
+  >
+    可视化 AI 应用开发平台
+  </Card>
+</CardGroup>
+
+### 翻译场景
+
+<CardGroup cols={2}>
+  <Card
+    title="Bob 翻译"
+    icon="language"
+    href="/scenarios/translation/bob"
+  >
+    macOS 上的专业翻译工具
+  </Card>
+  <Card
+    title="沉浸式翻译"
+    icon="globe-americas"  
+    href="/scenarios/translation/immersive"
+  >
+    浏览器双语对照阅读扩展
+  </Card>
+</CardGroup>
+
+## 🚀 为什么选择 API易？
+
+### 一个接口，多种模型
+
+无需为每个 AI 服务单独申请账号和管理 API 密钥。通过 API易，您只需要：
+
+- **一个账号**：管理所有 AI 服务
+- **一个 API 密钥**：访问所有模型  
+- **一套接口标准**：兼容 OpenAI API 格式
+
+### 💡 支持的模型
+
+我们支持业界领先的 AI 模型：
+
+#### OpenAI 系列
+- GPT-4 / GPT-4 Turbo
+- GPT-3.5 Turbo
+- DALL·E 3
+- Whisper
+
+#### Anthropic 系列
+- Claude 3 Opus
+- Claude 3 Sonnet  
+- Claude 3 Haiku
+
+#### Google 系列
+- Gemini Pro
+- Gemini Pro Vision
+- Gemini Ultra
+
+#### 国产模型
+- 通义千问（Qwen）
+- 文心一言（ERNIE）
+- 智谱 GLM
+- 讯飞星火
+- DeepSeek
+
+### 🔧 简单易用
+
+切换模型就像修改一个参数一样简单：
+
+```python
+# 使用 GPT-4
+response = openai.ChatCompletion.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+
+# 切换到 Claude 3
+response = openai.ChatCompletion.create(
+    model="claude-3-opus-20240229",  # 只需修改模型名称
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+```
+
+### 🛡️ 稳定可靠
+
+- **高可用性**：多节点部署，智能路由
+- **自动降级**：模型不可用时自动切换
+- **负载均衡**：智能分配请求，避免限流
+- **实时监控**：24/7 服务状态监控
+
+### 💰 成本优化
+
+- **统一计费**：所有模型使用统一余额
+- **透明定价**：清晰的价格体系
+- **用量统计**：详细的使用报告
+- **灵活充值**：支持多种支付方式
 
 ## 🎯 核心特色
 
-### GPT-4o 图片生成 领先服务商
+### GPT-4o 图片生成领先服务商
 GPT-4o、Flux生成图片解决方案，日产数万张图片，质量效果惊人。gpt-4o-image价格屠夫仅$0.01一张图。
 
 ### 稳定可靠、并发无上限
@@ -81,52 +276,36 @@ GPT-4o、Flux生成图片解决方案，日产数万张图片，质量效果惊�
 ### 热门、稀缺AI大模型覆盖
 一键连接所有热门AI模型，OpenAI o3、Claude 4、Gemini 2.5 Pro、DeepSeek和Qwen等等，统一格式，一个令牌，随心调用200+大模型。
 
-## 🛠️ 开发资源
+## 🚀 开始使用
+
+准备好开始了吗？只需三步即可开始：
 
 <CardGroup cols={3}>
-  <Card
-    title="API参考"
-    icon="code"
-    href="/api-reference/introduction"
-  >
-    完整的API接口文档和调用示例
-  </Card>
-  <Card
-    title="模型指南"
-    icon="book"
-    href="/api-reference/openai"
-  >
-    各主流AI模型的详细使用指南
-  </Card>
-  <Card
-    title="第三方集成"
-    icon="puzzle-piece"
-    href="/api-reference/langchain"
-  >
-    Langchain、Cursor等热门工具集成教程
-  </Card>
+<Card title="注册账号" icon="user-plus" href="https://vip.apiyi.com">
+  创建您的 API易 账号
+</Card>
+
+<Card title="获取密钥" icon="key" href="/getting-started">
+  生成您的 API 密钥
+</Card>
+
+<Card title="接入使用" icon="code" href="/api-manual">
+  查看 API 文档开始集成
+</Card>
 </CardGroup>
 
-## 💡 使用场景
-
-**API易** 适用于各种AI应用场景：
-- **代码开发**：Cursor、VS Code等开发工具
-- **文档翻译**：沉浸式翻译、欧陆翻译等
-- **AI对话**：Lobe-chat、ChatGPT Next Web等
-- **企业应用**：客服机器人、内容生成、数据分析等
-
-## 🔗 相关链接
+## 🔗 快速链接
 
 <CardGroup cols={2}>
   <Card
     title="立即注册"
     icon="user-plus"
-    href="https://lp.apiyi.com"
+    href="https://vip.apiyi.com"
   >
     注册账号，免费获得300万Token测试额度
   </Card>
   <Card
-    title="控制台"
+    title="管理控制台"
     icon="gear"
     href="https://vip.apiyi.com"
   >

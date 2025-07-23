@@ -1,0 +1,77 @@
+---
+title: Open WebUI
+description: 自托管的 Web 对话界面集成指南
+---
+
+# Open WebUI
+
+Open WebUI 是一个功能丰富的自托管 WebUI，支持各种 LLM 模型。通过 API易，您可以在 Open WebUI 中访问多种 AI 模型。
+
+## 快速部署
+
+### Docker 安装
+
+```bash
+docker run -d -p 3000:8080 \
+  --name open-webui \
+  --restart always \
+  ghcr.io/open-webui/open-webui:main
+```
+
+### 配置 API易
+
+1. 访问 `http://localhost:3000`
+2. 创建管理员账户并登录
+3. 点击个人头像 > 管理员面板
+4. 选择"外部连接"选项
+5. 配置：
+   - **API 端点**：`https://api.apiyi.com/v1`
+   - **API 密钥**：您的 API易 密钥
+
+## 核心功能
+
+### 多轮对话
+支持上下文记忆的连续对话
+
+### 文档上传
+上传 PDF、TXT 等文档进行分析
+
+### 模型切换
+在对话中随时切换不同模型
+
+### 对话管理
+- 新建对话
+- 重命名对话
+- 导出对话记录
+
+## 高级设置
+
+### 系统提示词
+为每个对话设置自定义系统提示
+
+### 参数调整
+- Temperature: 控制创造性
+- Top P: 核采样参数
+- Max Tokens: 最大输出长度
+
+### 用户管理
+管理员可以创建和管理多个用户账户
+
+## 故障排除
+
+### 连接问题
+确保 API 端点正确：`https://api.apiyi.com/v1`
+
+### 模型列表为空
+检查 API 密钥是否有效
+
+### 响应缓慢
+尝试使用更快的模型如 GPT-3.5-turbo
+
+## 最佳实践
+
+1. **定期备份**：导出重要对话
+2. **合理使用**：选择适合的模型
+3. **安全设置**：使用强密码保护
+
+需要更多帮助？请查看 [详细集成文档](/api-reference/integrations/open-webui)。

@@ -11,54 +11,58 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "基础",
+        "tab": "首页",
         "groups": [
           {
-            "group": "开始使用",
+            "group": "产品基础",
             "pages": [
               "index",
-              "quickstart",
-              "models"
+              "getting-started", 
+              "api-manual"
             ]
           },
           {
-            "group": "开发指南",
+            "group": "API 能力",
             "pages": [
-              "development/authentication",
-              "development/error-handling",
-              "development/best-practices",
-              "development/rate-limits"
+              "api-capabilities/model-info",
+              "api-capabilities/openai-sdk",
+              "api-capabilities/openai-responses",
+              "gpt-image-1",
+              "image-edit"
             ]
           }
         ]
       },
       {
-        "tab": "API参考",
+        "tab": "使用场景",
         "groups": [
           {
-            "group": "核心接口",
+            "group": "对话型 AI",
             "pages": [
-              "api-reference/introduction",
-              "api-reference/chat-completions",
-              "api-reference/models",
-              "api-reference/images"
+              "scenarios/chat/cherry-studio",
+              "scenarios/chat/open-webui",
+              "scenarios/chat/chatgpt-next-web"
             ]
           },
           {
-            "group": "模型指南",
+            "group": "编程开发",
             "pages": [
-              "api-reference/openai",
-              "api-reference/claude",
-              "api-reference/gemini",
-              "api-reference/chinese-models"
+              "scenarios/programming/cursor",
+              "scenarios/programming/cline"
             ]
           },
           {
-            "group": "第三方集成",
+            "group": "技术工程",
             "pages": [
-              "api-reference/langchain",
-              "api-reference/cursor",
-              "api-reference/applications"
+              "scenarios/engineering/langchain",
+              "scenarios/engineering/dify"
+            ]
+          },
+          {
+            "group": "翻译场景",
+            "pages": [
+              "scenarios/translation/bob",
+              "scenarios/translation/immersive"
             ]
           }
         ]
@@ -68,12 +72,12 @@
       "anchors": [
         {
           "anchor": "官方网站",
-          "href": "https://lp.apiyi.com",
+          "href": "https://api.apiyi.com",
           "icon": "globe"
         },
         {
           "anchor": "价格",
-          "href": "https://lp.apiyi.com/#pricing",
+          "href": "https://api.apiyi.com/#pricing",
           "icon": "dollar-sign"
         },
         {
@@ -86,24 +90,50 @@
   },
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "dark": "/logo/dark.svg",
+    "href": "/"
   },
   "navbar": {
     "links": [
       {
         "label": "注册使用",
-        "href": "https://lp.apiyi.com"
+        "href": "https://api.apiyi.com"
       }
     ],
     "primary": {
       "type": "button",
       "label": "控制台",
-      "href": "https://vip.apiyi.com"
+      "href": "https://api.apiyi.com"
     }
   },
   "footer": {
     "socials": {
-      "website": "https://lp.apiyi.com"
+      "website": "https://api.apiyi.com"
     }
+  },
+  "topbarLinks": [
+    {
+      "name": "控制台",
+      "url": "https://api.apiyi.com"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "API Key",
+      "icon": "key",
+      "url": "https://api.apiyi.com"
+    }
+  ],
+  "tabs": [],
+  "primaryTab": {
+    "name": "Documentation"
+  },
+  "analytics": {},
+  "feedback": {
+    "thumbsRating": true
+  },
+  "topAnchorOffset": 100,
+  "sidebarConfig": {
+    "collapsed": false
   }
 }

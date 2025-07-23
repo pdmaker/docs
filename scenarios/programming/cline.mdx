@@ -1,0 +1,271 @@
+---
+title: Cline (VS Code)
+description: VS Code 中的 AI 编程助手集成指南
+---
+
+# Cline (VS Code)
+
+Cline（原 Claude Dev）是一款强大的 VS Code AI 编程助手插件，支持多种 AI 模型。通过 API易，您可以灵活切换使用各种主流 AI 模型辅助编程。
+
+## 快速安装
+
+### 1. 安装插件
+
+在 VS Code 扩展商店搜索 "Cline" 并安装
+
+### 2. 配置 API易
+
+1. 点击左侧的 Cline 图标
+2. 点击设置按钮（齿轮图标）
+3. 选择 **OpenAI Compatible**
+4. 配置参数：
+   - **Base URL**：`https://api.apiyi.com/v1`
+   - **API Key**：您的 API易 密钥
+   - **Model Name**：输入模型名称
+
+### 推荐模型
+
+- `claude-3-5-sonnet-20241022`（最新 Claude）
+- `gpt-4-turbo-preview`（GPT-4 最新版）
+- `gpt-3.5-turbo`（快速经济选择）
+
+## 核心功能
+
+### 智能代码补全
+
+```python
+# 输入注释，AI 自动生成代码
+# 计算斐波那契数列的第 n 项
+def fibonacci(n):
+    # Cline 会自动补全实现
+```
+
+### 代码解释
+
+选中代码片段，使用：
+- `Cline: Explain Code`：解释代码
+- `Cline: Explain Error`：解释错误
+
+### 代码重构
+
+- **优化性能**：提供性能优化建议
+- **改进可读性**：重构复杂代码
+- **修复问题**：自动修复常见问题
+
+### 生成测试
+
+```javascript
+// 原始函数
+function add(a, b) {
+    return a + b;
+}
+
+// Cline 生成的测试
+describe('add function', () => {
+    test('should add two numbers correctly', () => {
+        expect(add(2, 3)).toBe(5);
+        expect(add(-1, 1)).toBe(0);
+    });
+});
+```
+
+## 常用命令
+
+| 命令 | 快捷键 | 功能 |
+|------|--------|------|
+| Cline: Ask | `Ctrl+Shift+L` | 询问 AI |
+| Cline: Explain | `Ctrl+Shift+E` | 解释代码 |
+| Cline: Refactor | `Ctrl+Shift+R` | 重构代码 |
+| Cline: Generate | `Ctrl+Shift+G` | 生成代码 |
+
+## 高级功能
+
+### 多文件操作
+
+Cline 可以理解和操作多个相关文件：
+
+```bash
+"将 utils.js 中的函数移动到 helpers.js，并更新所有引用"
+```
+
+### 架构设计
+
+生成项目架构：
+
+```text
+请为电商后台管理系统设计架构，包含：
+- 用户管理
+- 商品管理
+- 订单处理
+- 数据分析
+使用 React + Node.js + PostgreSQL
+```
+
+### 代码审查
+
+```text
+Review PR:
+- 检查代码规范
+- 发现潜在 bug
+- 性能优化建议
+- 安全漏洞扫描
+```
+
+## 使用技巧
+
+### 1. 上下文管理
+
+提供更好的上下文：
+
+```typescript
+// @context: React 组件用于用户认证
+// @requirements: 支持 OAuth2 登录流程
+// @constraints: 兼容 NextJS 13+
+
+// AI 基于上下文生成更准确的代码
+```
+
+### 2. 自定义提示词
+
+在设置中配置：
+
+```json
+{
+    "cline.customPrompts": {
+        "codeReview": "审查代码，关注性能、安全、规范",
+        "optimize": "优化代码性能和可读性",
+        "document": "生成详细的中文文档"
+    }
+}
+```
+
+### 3. 项目级配置
+
+创建 `.cline/config.json`：
+
+```json
+{
+    "model": "claude-3-5-sonnet-20241022",
+    "temperature": 0.7,
+    "language": "zh-CN",
+    "codeStyle": {
+        "naming": "camelCase",
+        "indent": 4,
+        "quotes": "single"
+    }
+}
+```
+
+## 故障排除
+
+### 连接失败
+
+检查配置：
+- Base URL：`https://api.apiyi.com/v1`
+- API 密钥是否有效
+- 网络连接是否正常
+
+### 响应超时
+
+解决方案：
+1. 使用更快的模型
+2. 减少请求复杂度
+3. 分解大任务
+
+### 生成质量差
+
+改进方法：
+1. 提供更多上下文
+2. 使用更强大的模型
+3. 明确指定需求
+
+## 最佳实践
+
+### 1. 模型选择
+
+| 任务类型 | 推荐模型 | 原因 |
+|---------|---------|------|
+| 简单补全 | gpt-3.5-turbo | 快速响应 |
+| 复杂逻辑 | claude-3-5-sonnet | 推理能力强 |
+| 代码审查 | gpt-4-turbo | 准确度高 |
+| 文档生成 | claude-3-haiku | 表达自然 |
+
+### 2. 提示词优化
+
+```text
+❌ 不好的提示：修复这个函数
+
+✅ 好的提示：修复 calculateTotal 函数中的浮点数精度问题，
+确保金额计算准确到小数点后两位
+```
+
+### 3. 渐进式开发
+
+1. 先生成基础框架
+2. 逐步添加功能
+3. 最后优化性能
+4. 添加错误处理
+
+### 4. 安全意识
+
+- 不在代码中包含敏感信息
+- 审查 AI 生成的代码
+- 验证第三方依赖
+- 注意安全漏洞
+
+## 集成工作流
+
+### Git 集成
+
+```bash
+# 自动生成 commit message
+git add .
+# Cline: 根据改动生成 commit message
+```
+
+### 测试驱动开发
+
+1. 先写测试用例
+2. Cline 生成实现代码
+3. 运行测试验证
+4. 迭代优化
+
+### CI/CD 集成
+
+生成配置文件：
+
+```yaml
+# Cline 可以生成 GitHub Actions 配置
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: npm test
+```
+
+## 性能优化
+
+### 1. 模型切换
+
+根据任务选择模型：
+- 开发阶段：轻量模型
+- 复杂任务：高级模型
+- 生产环境：平衡性能和成本
+
+### 2. 缓存策略
+
+- 启用响应缓存
+- 缓存常用代码片段
+- 定期清理缓存
+
+### 3. 请求优化
+
+- 批量处理相关请求
+- 使用流式响应
+- 设置合理超时
+
+需要更多帮助？请查看 [详细集成文档](/api-reference/integrations/cline)。

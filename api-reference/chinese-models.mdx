@@ -64,7 +64,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://vip.apiyi.com/v1"
+    base_url="https://api.apiyi.com/v1"
 )
 
 # 基础中文对话
@@ -92,7 +92,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://vip.apiyi.com/v1'
+  baseURL: 'https://api.apiyi.com/v1'
 });
 
 const completion = await openai.chat.completions.create({
@@ -115,7 +115,7 @@ console.log(completion.choices[0].message.content);
 ```
 
 ```bash cURL
-curl -X POST "https://vip.apiyi.com/v1/chat/completions" \
+curl -X POST "https://api.apiyi.com/v1/chat/completions" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
@@ -543,7 +543,6 @@ response = client.chat.completions.create(
 debug_request = """
 以下Python代码存在性能问题，请帮助分析和优化：
 
-```python
 def find_duplicates(arr):
     duplicates = []
     for i in range(len(arr)):
@@ -564,7 +563,6 @@ def process_data(data):
     duplicates = find_duplicates(data)
     clean_data = remove_duplicates(data)
     return clean_data, duplicates
-```
 
 问题：
 1. 这段代码在处理大量数据时非常慢
@@ -955,7 +953,7 @@ class ChineseModelOptimizer:
     def __init__(self, default_model="qwen-turbo-latest"):
         self.client = OpenAI(
             api_key="YOUR_API_KEY",
-            base_url="https://vip.apiyi.com/v1"
+            base_url="https://api.apiyi.com/v1"
         )
         self.default_model = default_model
         self.model_routing = {

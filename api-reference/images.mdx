@@ -42,7 +42,7 @@ API易的图片生成服务支持多种AI图像生成模型，包括OpenAI DALL-
 
 ## 接口信息
 
-**接口地址**：`POST https://vip.apiyi.com/v1/images/generations`
+**接口地址**：`POST https://api.apiyi.com/v1/images/generations`
 
 **兼容性**：完全兼容OpenAI官方API格式
 
@@ -83,7 +83,7 @@ API易的图片生成服务支持多种AI图像生成模型，包括OpenAI DALL-
 <CodeGroup>
 
 ```bash cURL
-curl https://vip.apiyi.com/v1/images/generations \
+curl https://api.apiyi.com/v1/images/generations \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
@@ -100,7 +100,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://vip.apiyi.com/v1'
+  baseURL: 'https://api.apiyi.com/v1'
 });
 
 async function generateImage() {
@@ -123,7 +123,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://vip.apiyi.com/v1"
+    base_url="https://api.apiyi.com/v1"
 )
 
 response = client.images.generate(
@@ -148,7 +148,7 @@ import (
 
 func main() {
     config := openai.DefaultConfig("YOUR_API_KEY")
-    config.BaseURL = "https://vip.apiyi.com/v1"
+    config.BaseURL = "https://api.apiyi.com/v1"
     
     client := openai.NewClientWithConfig(config)
     
@@ -517,7 +517,7 @@ import aiohttp
 
 async def generate_image(session, prompt):
     async with session.post(
-        'https://vip.apiyi.com/v1/images/generations',
+        'https://api.apiyi.com/v1/images/generations',
         headers={'Authorization': 'Bearer YOUR_API_KEY'},
         json={
             'model': 'gpt-4o-image',
@@ -630,7 +630,7 @@ async def batch_generate():
   <Card
     title="查看价格"
     icon="dollar-sign"
-    href="https://lp.apiyi.com/#pricing"
+    href="https://api.apiyi.com/#pricing"
   >
     查看详细的图片生成价格表和优惠政策
   </Card>

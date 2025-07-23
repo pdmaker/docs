@@ -1,0 +1,422 @@
+---
+title: API 手册
+description: API易 接口使用手册和参考文档
+---
+
+# API 手册
+
+本手册提供 API易 的完整接口文档，帮助您快速集成和使用我们的服务。
+
+## 基础信息
+
+### API 端点
+
+- **主要端点**：`https://api.apiyi.com/v1`
+- **备用端点**：`https://vip.apiyi.com/v1`
+
+### 认证方式
+
+所有 API 请求需要在 Header 中包含认证信息：
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+### 请求格式
+
+- **Content-Type**：`application/json`
+- **编码格式**：UTF-8
+- **请求方法**：POST（大部分接口）
+
+## 核心接口
+
+### 1. 对话补全（Chat Completions）
+
+创建一个对话补全请求，支持多轮对话。
+
+**请求端点**
+```
+POST /v1/chat/completions
+```
+
+**请求参数**
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| model | string | 是 | 模型名称，如 `gpt-3.5-turbo` |
+| messages | array | 是 | 对话消息数组 |
+| temperature | number | 否 | 采样温度，0-2之间，默认1 |
+| max_tokens | integer | 否 | 最大生成令牌数 |
+| stream | boolean | 否 | 是否流式返回，默认false |
+| top_p | number | 否 | 核采样参数，0-1之间 |
+| n | integer | 否 | 生成数量，默认1 |
+| stop | string/array | 否 | 停止序列 |
+| presence_penalty | number | 否 | 存在惩罚，-2到2之间 |
+| frequency_penalty | number | 否 | 频率惩罚，-2到2之间 |
+
+**消息格式**
+```json
+{
+  "role": "system|user|assistant",
+  "content": "消息内容"
+}
+```
+
+**请求示例**
+```json
+{
+  "model": "gpt-3.5-turbo",
+  "messages": [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Hello!"}
+  ],
+  "temperature": 0.7
+}
+```
+
+**响应示例**
+```json
+{
+  "id": "chatcmpl-123",
+  "object": "chat.completion",
+  "created": 1699000000,
+  "model": "gpt-3.5-turbo",
+  "choices": [{
+    "index": 0,
+    "message": {
+      "role": "assistant",
+      "content": "Hello! How can I help you today?"
+    },
+    "finish_reason": "stop"
+  }],
+  "usage": {
+    "prompt_tokens": 20,
+    "completion_tokens": 10,
+    "total_tokens": 30
+  }
+}
+```
+
+### 2. 文本补全（Completions）
+
+为兼容旧版接口保留，建议使用 Chat Completions。
+
+**请求端点**
+```
+POST /v1/completions
+```
+
+**请求参数**
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| model | string | 是 | 模型名称 |
+| prompt | string/array | 是 | 提示文本 |
+| max_tokens | integer | 否 | 最大生成长度 |
+| temperature | number | 否 | 采样温度 |
+| top_p | number | 否 | 核采样参数 |
+| n | integer | 否 | 生成数量 |
+| stream | boolean | 否 | 流式输出 |
+| stop | string/array | 否 | 停止序列 |
+
+### 3. 嵌入向量（Embeddings）
+
+将文本转换为向量表示。
+
+**请求端点**
+```
+POST /v1/embeddings
+```
+
+**请求参数**
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| model | string | 是 | 模型名称，如 `text-embedding-ada-002` |
+| input | string/array | 是 | 输入文本 |
+| encoding_format | string | 否 | 编码格式，`float` 或 `base64` |
+
+**请求示例**
+```json
+{
+  "model": "text-embedding-ada-002",
+  "input": "The quick brown fox"
+}
+```
+
+### 4. 图像生成（Images）
+
+生成、编辑或变换图像。
+
+**生成图像**
+```
+POST /v1/images/generations
+```
+
+**请求参数**
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| model | string | 是 | 模型名称，如 `dall-e-3` |
+| prompt | string | 是 | 图像描述提示词 |
+| n | integer | 否 | 生成数量，默认1 |
+| size | string | 否 | 图像尺寸：`1024x1024`, `1792x1024`, `1024x1792` |
+| quality | string | 否 | 质量：`standard` 或 `hd` |
+| style | string | 否 | 风格：`vivid` 或 `natural` |
+
+### 5. 音频转文字（Audio）
+
+语音识别和转录。
+
+**转录音频**
+```
+POST /v1/audio/transcriptions
+```
+
+**请求参数**（Form-Data）
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| file | file | 是 | 音频文件 |
+| model | string | 是 | 模型名称，如 `whisper-1` |
+| language | string | 否 | 语言代码 |
+| prompt | string | 否 | 指导提示 |
+| response_format | string | 否 | 响应格式 |
+| temperature | number | 否 | 采样温度 |
+
+### 6. 模型列表
+
+获取可用模型列表。
+
+**请求端点**
+```
+GET /v1/models
+```
+
+**响应示例**
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "gpt-3.5-turbo",
+      "object": "model",
+      "created": 1677610602,
+      "owned_by": "openai"
+    },
+    {
+      "id": "gpt-4",
+      "object": "model",
+      "created": 1687882411,
+      "owned_by": "openai"
+    }
+  ]
+}
+```
+
+## 流式响应
+
+### 开启流式输出
+
+在请求中设置 `stream: true`：
+
+```json
+{
+  "model": "gpt-3.5-turbo",
+  "messages": [{"role": "user", "content": "Hello"}],
+  "stream": true
+}
+```
+
+### 流式响应格式
+
+响应将以 Server-Sent Events (SSE) 格式返回：
+
+```
+data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1699000000,"model":"gpt-3.5-turbo","choices":[{"delta":{"content":"Hello"},"index":0}]}
+
+data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1699000000,"model":"gpt-3.5-turbo","choices":[{"delta":{"content":" there"},"index":0}]}
+
+data: [DONE]
+```
+
+### 处理流式响应
+
+<Tabs>
+  <Tab title="Python">
+    ```python
+    import requests
+    import json
+    
+    response = requests.post(
+        'https://api.apiyi.com/v1/chat/completions',
+        headers={
+            'Authorization': f'Bearer {api_key}',
+            'Content-Type': 'application/json'
+        },
+        json={
+            'model': 'gpt-3.5-turbo',
+            'messages': [{'role': 'user', 'content': 'Hello'}],
+            'stream': True
+        },
+        stream=True
+    )
+    
+    for line in response.iter_lines():
+        if line:
+            line = line.decode('utf-8')
+            if line.startswith('data: '):
+                data = line[6:]
+                if data != '[DONE]':
+                    chunk = json.loads(data)
+                    content = chunk['choices'][0]['delta'].get('content', '')
+                    print(content, end='')
+    ```
+  </Tab>
+  
+  <Tab title="JavaScript">
+    ```javascript
+    const response = await fetch('https://api.apiyi.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [{role: 'user', content: 'Hello'}],
+        stream: true
+      })
+    });
+    
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      
+      const chunk = decoder.decode(value);
+      const lines = chunk.split('\n');
+      
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6);
+          if (data !== '[DONE]') {
+            const json = JSON.parse(data);
+            const content = json.choices[0].delta.content || '';
+            process.stdout.write(content);
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## 错误处理
+
+### 错误响应格式
+
+```json
+{
+  "error": {
+    "message": "Invalid API key provided",
+    "type": "invalid_request_error",
+    "param": null,
+    "code": "invalid_api_key"
+  }
+}
+```
+
+### 常见错误码
+
+| 错误码 | HTTP状态码 | 说明 |
+|--------|-----------|------|
+| invalid_api_key | 401 | API密钥无效 |
+| insufficient_quota | 429 | 额度不足 |
+| model_not_found | 404 | 模型不存在 |
+| invalid_request_error | 400 | 请求参数错误 |
+| server_error | 500 | 服务器内部错误 |
+| rate_limit_exceeded | 429 | 请求频率过高 |
+
+### 错误处理示例
+
+```python
+try:
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": "Hello"}]
+    )
+except Exception as e:
+    if hasattr(e, 'status_code'):
+        if e.status_code == 401:
+            print("API密钥无效")
+        elif e.status_code == 429:
+            print("请求过于频繁或额度不足")
+        elif e.status_code == 500:
+            print("服务器错误，请稍后重试")
+    else:
+        print(f"未知错误：{str(e)}")
+```
+
+## 最佳实践
+
+### 1. 请求优化
+
+- **合理设置 max_tokens**：避免不必要的长输出
+- **使用 temperature**：控制输出的随机性
+- **批量处理**：合并多个请求减少调用次数
+
+### 2. 错误重试
+
+实现指数退避的重试机制：
+
+```python
+import time
+import random
+
+def retry_with_backoff(func, max_retries=3):
+    for i in range(max_retries):
+        try:
+            return func()
+        except Exception as e:
+            if i == max_retries - 1:
+                raise e
+            wait_time = (2 ** i) + random.uniform(0, 1)
+            time.sleep(wait_time)
+```
+
+### 3. 安全建议
+
+- **保护API密钥**：使用环境变量存储
+- **限制权限**：为不同应用创建不同的密钥
+- **监控使用**：定期检查API使用日志
+
+### 4. 性能优化
+
+- **使用流式输出**：提升用户体验
+- **缓存响应**：对相同请求缓存结果
+- **并发控制**：合理控制并发请求数
+
+## 速率限制
+
+API易 实施以下速率限制：
+
+| 限制类型 | 限制值 | 说明 |
+|---------|--------|------|
+| RPM (每分钟请求数) | 3000 | 每个API密钥 |
+| TPM (每分钟令牌数) | 1000000 | 每个API密钥 |
+| 并发请求数 | 100 | 同时处理的请求 |
+
+超出限制时会返回 429 错误，请合理控制请求频率。
+
+## 需要帮助？
+
+- 查看 [完整API文档](/api-reference/introduction)
+- 访问 [开发者社区](https://api.apiyi.com)
+- 联系技术支持：support@apiyi.com
+
+<Note>
+本手册持续更新中，请关注最新版本以获取新功能和改进。
+</Note>

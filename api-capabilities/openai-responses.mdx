@@ -1,0 +1,618 @@
+---
+title: OpenAI Responses API 支持
+description: 兼容 OpenAI 响应格式的标准接口文档
+---
+
+# OpenAI Responses API 支持
+
+API易 完全兼容 OpenAI API 的响应格式，确保您的应用程序可以无缝切换，无需修改任何响应处理代码。
+
+## 响应格式标准
+
+### Chat Completions 响应
+
+#### 标准响应格式
+
+```json
+{
+  "id": "chatcmpl-7QyqpwdfhqwajicIEznoc6Q47XAyW",
+  "object": "chat.completion",
+  "created": 1677858242,
+  "model": "gpt-3.5-turbo-0613",
+  "usage": {
+    "prompt_tokens": 13,
+    "completion_tokens": 7,
+    "total_tokens": 20
+  },
+  "choices": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": "这是AI的回复内容。"
+      },
+      "finish_reason": "stop",
+      "index": 0
+    }
+  ]
+}
+```
+
+#### 字段说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `id` | string | 完成请求的唯一标识符 |
+| `object` | string | 对象类型，固定为 "chat.completion" |
+| `created` | integer | Unix 时间戳 |
+| `model` | string | 使用的模型名称 |
+| `usage` | object | Token 使用统计 |
+| `choices` | array | 生成的选择列表 |
+
+#### Usage 对象
+
+```json
+{
+  "prompt_tokens": 13,      // 输入消耗的 token 数
+  "completion_tokens": 7,   // 输出消耗的 token 数  
+  "total_tokens": 20        // 总消耗的 token 数
+}
+```
+
+#### Choice 对象
+
+```json
+{
+  "message": {
+    "role": "assistant",
+    "content": "回复内容"
+  },
+  "finish_reason": "stop",
+  "index": 0
+}
+```
+
+**finish_reason 值说明：**
+- `stop`: 自然结束
+- `length`: 达到最大长度限制
+- `function_call`: 触发函数调用
+- `content_filter`: 内容被过滤
+
+### 流式响应格式
+
+#### 流式数据块
+
+```json
+{
+  "id": "chatcmpl-7QyqpwdfhqwajicIEznoc6Q47XAyW",
+  "object": "chat.completion.chunk",
+  "created": 1677858242,
+  "model": "gpt-3.5-turbo-0613", 
+  "choices": [
+    {
+      "delta": {
+        "content": "你好"
+      },
+      "index": 0,
+      "finish_reason": null
+    }
+  ]
+}
+```
+
+#### 流式结束标记
+
+```
+data: [DONE]
+```
+
+### 错误响应格式
+
+```json
+{
+  "error": {
+    "message": "Invalid API key provided",
+    "type": "invalid_request_error",
+    "param": null,
+    "code": "invalid_api_key"
+  }
+}
+```
+
+## Function Calling 响应
+
+### 函数调用请求
+
+```json
+{
+  "model": "gpt-3.5-turbo",
+  "messages": [
+    {"role": "user", "content": "北京今天天气怎么样？"}
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "description": "获取指定城市的天气信息",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {"type": "string", "description": "城市名称"}
+          },
+          "required": ["location"]
+        }
+      }
+    }
+  ]
+}
+```
+
+### 函数调用响应
+
+```json
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "created": 1699896916,
+  "model": "gpt-3.5-turbo-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "call_abc123",
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"location\": \"北京\"}"
+            }
+          }
+        ]
+      },
+      "finish_reason": "tool_calls"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 82,
+    "completion_tokens": 18,
+    "total_tokens": 100
+  }
+}
+```
+
+## 图像生成响应
+
+### DALL·E 响应格式
+
+```json
+{
+  "created": 1589478378,
+  "data": [
+    {
+      "url": "https://...",
+      "revised_prompt": "修订后的提示词"
+    }
+  ]
+}
+```
+
+### 字段说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `created` | integer | 创建时间戳 |
+| `data` | array | 生成的图像数组 |
+| `url` | string | 图像访问URL |
+| `revised_prompt` | string | AI 修订后的提示词 |
+
+## 嵌入向量响应
+
+### Embeddings 响应格式
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "object": "embedding",
+      "embedding": [
+        0.0023064255,
+        -0.009327292,
+        -0.0028842222,
+        // ... (1536 个浮点数)
+      ],
+      "index": 0
+    }
+  ],
+  "model": "text-embedding-ada-002",
+  "usage": {
+    "prompt_tokens": 8,
+    "total_tokens": 8
+  }
+}
+```
+
+## 模型列表响应
+
+### Models API 响应
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "gpt-3.5-turbo",
+      "object": "model",
+      "created": 1677610602,
+      "owned_by": "openai"
+    },
+    {
+      "id": "gpt-4",
+      "object": "model", 
+      "created": 1687882411,
+      "owned_by": "openai"
+    }
+  ]
+}
+```
+
+## 响应处理示例
+
+### Python 响应处理
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.apiyi.com/v1"
+)
+
+def handle_chat_response():
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": "Hello!"}]
+    )
+    
+    # 访问响应字段
+    print(f"模型: {response.model}")
+    print(f"ID: {response.id}")
+    print(f"创建时间: {response.created}")
+    
+    # 获取回复内容
+    content = response.choices[0].message.content
+    print(f"回复: {content}")
+    
+    # 获取使用统计
+    usage = response.usage
+    print(f"输入 tokens: {usage.prompt_tokens}")
+    print(f"输出 tokens: {usage.completion_tokens}")
+    print(f"总 tokens: {usage.total_tokens}")
+    
+    # 检查结束原因
+    finish_reason = response.choices[0].finish_reason
+    if finish_reason == "length":
+        print("回复因长度限制而截断")
+    elif finish_reason == "stop":
+        print("回复正常结束")
+```
+
+### JavaScript 响应处理
+
+```javascript
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.apiyi.com/v1'
+});
+
+async function handleChatResponse() {
+  const response = await openai.chat.completions.create({
+    model: 'gpt-3.5-turbo',
+    messages: [{ role: 'user', content: 'Hello!' }]
+  });
+  
+  // 访问响应字段
+  console.log(`模型: ${response.model}`);
+  console.log(`ID: ${response.id}`);
+  console.log(`创建时间: ${response.created}`);
+  
+  // 获取回复内容
+  const content = response.choices[0].message.content;
+  console.log(`回复: ${content}`);
+  
+  // 获取使用统计
+  console.log(`输入 tokens: ${response.usage.prompt_tokens}`);
+  console.log(`输出 tokens: ${response.usage.completion_tokens}`);
+  console.log(`总 tokens: ${response.usage.total_tokens}`);
+}
+```
+
+### 流式响应处理
+
+```python
+def handle_stream_response():
+    stream = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": "写一首短诗"}],
+        stream=True
+    )
+    
+    content_parts = []
+    
+    for chunk in stream:
+        # 检查是否有内容
+        if chunk.choices[0].delta.content is not None:
+            content = chunk.choices[0].delta.content
+            content_parts.append(content)
+            print(content, end="")
+        
+        # 检查是否结束
+        if chunk.choices[0].finish_reason is not None:
+            print(f"\n结束原因: {chunk.choices[0].finish_reason}")
+    
+    full_content = "".join(content_parts)
+    return full_content
+```
+
+## 错误响应处理
+
+### 标准错误格式
+
+```json
+{
+  "error": {
+    "message": "详细错误信息",
+    "type": "error_type",
+    "param": "error_parameter",
+    "code": "error_code"
+  }
+}
+```
+
+### 常见错误类型
+
+| 错误类型 | HTTP状态码 | 说明 |
+|---------|-----------|------|
+| `invalid_request_error` | 400 | 请求参数错误 |
+| `invalid_api_key` | 401 | API密钥无效 |
+| `insufficient_quota` | 429 | 额度不足 |
+| `model_not_found` | 404 | 模型不存在 |
+| `server_error` | 500 | 服务器错误 |
+
+### 错误处理示例
+
+```python
+from openai import OpenAI, APIError
+
+try:
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": "Hello"}]
+    )
+except APIError as e:
+    error_info = e.response.json()['error']
+    
+    print(f"错误类型: {error_info['type']}")
+    print(f"错误消息: {error_info['message']}")
+    print(f"错误代码: {error_info.get('code', 'N/A')}")
+    print(f"错误参数: {error_info.get('param', 'N/A')}")
+```
+
+## 响应头信息
+
+API易 在响应中包含以下有用的头信息：
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+x-ratelimit-limit-requests: 3000
+x-ratelimit-remaining-requests: 2999
+x-ratelimit-reset-requests: 1ms
+x-ratelimit-limit-tokens: 40000
+x-ratelimit-remaining-tokens: 39950
+x-ratelimit-reset-tokens: 1ms
+```
+
+### 头信息说明
+
+| 头信息 | 说明 |
+|--------|------|
+| `x-ratelimit-limit-requests` | 每分钟请求限制 |
+| `x-ratelimit-remaining-requests` | 剩余请求数 |
+| `x-ratelimit-reset-requests` | 请求限制重置时间 |
+| `x-ratelimit-limit-tokens` | 每分钟 token 限制 |
+| `x-ratelimit-remaining-tokens` | 剩余 token 数 |
+| `x-ratelimit-reset-tokens` | token 限制重置时间 |
+
+## 兼容性保证
+
+### 版本兼容
+
+API易 保证：
+
+1. **向后兼容**：新版本不会破坏现有集成
+2. **格式一致**：响应格式与 OpenAI 保持一致
+3. **字段稳定**：核心字段不会移除或重命名
+4. **错误标准**：错误格式遵循 OpenAI 标准
+
+### 模型特定响应
+
+不同模型的响应格式保持一致：
+
+```python
+# GPT 模型
+gpt_response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": "Hello"}]
+)
+
+# Claude 模型
+claude_response = client.chat.completions.create(
+    model="claude-3-opus-20240229", 
+    messages=[{"role": "user", "content": "Hello"}]
+)
+
+# 响应格式完全相同
+assert gpt_response.model == "gpt-4"
+assert claude_response.model == "claude-3-opus-20240229"
+assert type(gpt_response.choices[0].message.content) == str
+assert type(claude_response.choices[0].message.content) == str
+```
+
+## 响应验证
+
+### JSON Schema 验证
+
+您可以使用以下 JSON Schema 验证响应格式：
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {"type": "string"},
+    "object": {"type": "string", "enum": ["chat.completion"]},
+    "created": {"type": "integer"},
+    "model": {"type": "string"},
+    "choices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {"type": "integer"},
+          "message": {
+            "type": "object",
+            "properties": {
+              "role": {"type": "string"},
+              "content": {"type": "string"}
+            }
+          },
+          "finish_reason": {"type": "string"}
+        }
+      }
+    },
+    "usage": {
+      "type": "object",
+      "properties": {
+        "prompt_tokens": {"type": "integer"},
+        "completion_tokens": {"type": "integer"},
+        "total_tokens": {"type": "integer"}
+      }
+    }
+  },
+  "required": ["id", "object", "created", "model", "choices"]
+}
+```
+
+### Python 验证示例
+
+```python
+import jsonschema
+
+def validate_response(response_dict):
+    schema = {
+        "type": "object",
+        "properties": {
+            "id": {"type": "string"},
+            "object": {"type": "string"},
+            "created": {"type": "integer"},
+            "model": {"type": "string"},
+            "choices": {"type": "array"},
+            "usage": {"type": "object"}
+        },
+        "required": ["id", "object", "created", "model", "choices"]
+    }
+    
+    try:
+        jsonschema.validate(response_dict, schema)
+        return True
+    except jsonschema.ValidationError as e:
+        print(f"响应格式验证失败: {e}")
+        return False
+```
+
+## 最佳实践
+
+### 1. 响应处理
+
+```python
+def safe_get_content(response):
+    """安全获取响应内容"""
+    try:
+        return response.choices[0].message.content
+    except (IndexError, AttributeError):
+        return None
+
+def safe_get_usage(response):
+    """安全获取使用统计"""
+    try:
+        return {
+            'prompt_tokens': response.usage.prompt_tokens,
+            'completion_tokens': response.usage.completion_tokens,
+            'total_tokens': response.usage.total_tokens
+        }
+    except AttributeError:
+        return None
+```
+
+### 2. 错误恢复
+
+```python
+def robust_chat(message, max_retries=3):
+    """带重试的健壮聊天函数"""
+    for attempt in range(max_retries):
+        try:
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": message}]
+            )
+            return response.choices[0].message.content
+        
+        except APIError as e:
+            if attempt == max_retries - 1:
+                raise
+            print(f"重试 {attempt + 1}/{max_retries}: {e}")
+            time.sleep(2 ** attempt)
+```
+
+### 3. 响应缓存
+
+```python
+import hashlib
+import json
+
+class ResponseCache:
+    def __init__(self):
+        self.cache = {}
+    
+    def get_cache_key(self, messages, model, **kwargs):
+        """生成缓存键"""
+        data = {
+            'messages': messages,
+            'model': model,
+            **kwargs
+        }
+        return hashlib.md5(json.dumps(data, sort_keys=True).encode()).hexdigest()
+    
+    def get_or_create(self, messages, model, **kwargs):
+        """获取缓存或创建新响应"""
+        cache_key = self.get_cache_key(messages, model, **kwargs)
+        
+        if cache_key in self.cache:
+            return self.cache[cache_key]
+        
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            **kwargs
+        )
+        
+        self.cache[cache_key] = response
+        return response
+```
+
+需要更多帮助？请访问 [API易官网](https://vip.apiyi.com) 或查看 [OpenAI API 文档](https://platform.openai.com/docs/api-reference)。

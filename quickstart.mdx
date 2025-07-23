@@ -11,7 +11,7 @@ description: '3分钟上手API易，开始调用200+AI大模型'
 
 <Steps>
   <Step title="访问官网">
-    前往 [API易官网](https://lp.apiyi.com) 点击"立即免费注册"
+    前往 [API易官网](https://api.apiyi.com) 点击"立即免费注册"
   </Step>
   <Step title="创建账号">
     填写邮箱和密码，完成注册。每个用户都可获得300万Token免费测试额度
@@ -28,7 +28,6 @@ description: '3分钟上手API易，开始调用200+AI大模型'
     登录后进入"充值"页面，支持多种充值方式：
     - 支付宝
     - 微信支付
-    - 银行卡
     
     <Note>
       首次充值还可获得1美元额外赠送！确保账户余额 > 0 才能正常使用API服务。
@@ -38,7 +37,7 @@ description: '3分钟上手API易，开始调用200+AI大模型'
     API易的费率与OpenAI官方保持一致，部分模型更有价格优势：
     - 官转模型约官网八折
     - GPT-4o图片生成仅$0.01/张
-    - 具体费率请查看[价格页面](https://lp.apiyi.com/#pricing)
+    - 具体费率请查看[价格页面](https://api.apiyi.com/#pricing)
   </Accordion>
 </AccordionGroup>
 
@@ -66,16 +65,16 @@ description: '3分钟上手API易，开始调用200+AI大模型'
 
 ### 获取中转信息
 
-- **稳定中转地址**：`https://vip.apiyi.com`
+- **稳定中转地址**：`https://api.apiyi.com`
 - **API Key**：你刚才创建的 `sk-***`
-- **备用地址**：`https://api.apiyi.com`（新功能测试专用）
+- **备用地址**：`https://vip.apiyi.com`（海外线路专用）
 
 ### 调用示例
 
 <CodeGroup>
 
 ```bash cURL
-curl https://vip.apiyi.com/v1/chat/completions \
+curl https://api.apiyi.com/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
@@ -92,7 +91,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://vip.apiyi.com/v1'
+  baseURL: 'https://api.apiyi.com/v1'
 });
 
 const completion = await openai.chat.completions.create({
@@ -111,7 +110,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://vip.apiyi.com/v1"
+    base_url="https://api.apiyi.com/v1"
 )
 
 completion = client.chat.completions.create(
@@ -136,7 +135,7 @@ import (
 
 func main() {
     config := openai.DefaultConfig("YOUR_API_KEY")
-    config.BaseURL = "https://vip.apiyi.com/v1"
+    config.BaseURL = "https://api.apiyi.com/v1"
     
     client := openai.NewClientWithConfig(config)
     
@@ -169,9 +168,9 @@ func main() {
 
 在一些第三方软件或平台输入自定义URL时，可能需要不同的格式：
 
-- `https://vip.apiyi.com`
-- `https://vip.apiyi.com/v1`（最常见）
-- `https://vip.apiyi.com/v1/chat/completions`
+- `https://api.apiyi.com`
+- `https://api.apiyi.com/v1`（最常见）
+- `https://api.apiyi.com/v1/chat/completions`
 
 ## 🔄 切换不同模型
 
@@ -230,7 +229,7 @@ API易可以无缝集成到各种AI工具中：
 
 <Steps>
   <Step title="访问控制台">
-    登录 [API易控制台](https://vip.apiyi.com) 查看详细的使用统计
+    登录 [API易控制台](https://api.apiyi.com) 查看详细的使用统计
   </Step>
   <Step title="查看日志">
     在"日志"页面可以查看每次API调用的详细记录和消费情况
@@ -246,7 +245,7 @@ API易可以无缝集成到各种AI工具中：
   <Card
     title="常见问题"
     icon="question"
-    href="https://lp.apiyi.com/#faq"
+    href="https://api.apiyi.com/#faq"
   >
     查看常见问题解答，快速解决疑问
   </Card>

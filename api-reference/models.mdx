@@ -9,7 +9,7 @@ Models API用于获取API易平台支持的AI模型列表和详细信息。通�
 
 ## 接口信息
 
-**接口地址**：`GET https://vip.apiyi.com/v1/models`
+**接口地址**：`GET https://api.apiyi.com/v1/models`
 
 **兼容性**：完全兼容OpenAI官方API格式
 
@@ -20,7 +20,7 @@ Models API用于获取API易平台支持的AI模型列表和详细信息。通�
 <CodeGroup>
 
 ```bash cURL
-curl https://vip.apiyi.com/v1/models \
+curl https://api.apiyi.com/v1/models \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
@@ -29,7 +29,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://vip.apiyi.com/v1'
+  baseURL: 'https://api.apiyi.com/v1'
 });
 
 async function getModels() {
@@ -45,7 +45,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://vip.apiyi.com/v1"
+    base_url="https://api.apiyi.com/v1"
 )
 
 models = client.models.list()
@@ -63,7 +63,7 @@ import (
 
 func main() {
     config := openai.DefaultConfig("YOUR_API_KEY")
-    config.BaseURL = "https://vip.apiyi.com/v1"
+    config.BaseURL = "https://api.apiyi.com/v1"
     
     client := openai.NewClientWithConfig(config)
     
@@ -131,7 +131,7 @@ func main() {
 <CodeGroup>
 
 ```bash cURL
-curl https://vip.apiyi.com/v1/models/gpt-4o \
+curl https://api.apiyi.com/v1/models/gpt-4o \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
@@ -482,7 +482,7 @@ import requests
 
 # 获取模型列表
 response = requests.get(
-    "https://vip.apiyi.com/v1/models",
+    "https://api.apiyi.com/v1/models",
     headers={"Authorization": "Bearer YOUR_API_KEY"}
 )
 

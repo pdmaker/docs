@@ -1,0 +1,409 @@
+---
+title: GPT-Image-1 图像生成
+sidebarTitle: GPT-Image-1 生图
+description: 使用 OpenAI 官方 Image API 格式调用 GPT-Image-1 模型进行图像生成
+---
+
+# GPT-Image-1 图像生成
+
+GPT-Image-1 是 OpenAI 最新的图像生成模型，提供高质量的图片生成能力。本文档介绍如何通过 API易 使用标准的 OpenAI Image API 格式调用此模型。
+
+## 概述
+
+GPT-Image-1 支持通过文本提示词生成高质量图像，完全兼容 OpenAI 官方的 Image Generation API 格式。
+
+### 主要特性
+
+- 🎨 **高质量图像生成**：生成细节丰富、符合提示词的图像
+- 🚀 **快速响应**：优化的生成速度，快速获得结果  
+- 💰 **极具性价比**：仅需 $0.01/张图片
+- 🔧 **完全兼容**：100% 兼容 OpenAI Image API 格式
+
+## 快速开始
+
+### 基础配置
+
+```python
+import openai
+
+# 配置 API易 的接入点和密钥
+openai.api_base = "https://api.apiyi.com/v1"
+openai.api_key = "your-api-key"
+```
+
+### 生成图像
+
+使用标准的 OpenAI Image API 格式调用：
+
+```python
+# 生成图像
+response = openai.Image.create(
+    model="gpt-image-1",
+    prompt="A serene landscape with mountains and a lake at sunset",
+    n=1,
+    size="1024x1024"
+)
+
+# 获取生成的图像 URL
+image_url = response['data'][0]['url']
+print(f"Generated image URL: {image_url}")
+```
+
+## API 参数详解
+
+### 请求参数
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 模型名称，使用 `gpt-image-1` |
+| `prompt` | string | 是 | 图像生成的文本提示词，最长 1000 字符 |
+| `n` | integer | 否 | 生成图像的数量，默认为 1，最大为 10 |
+| `size` | string | 否 | 图像尺寸，支持 `256x256`、`512x512`、`1024x1024`（默认） |
+| `response_format` | string | 否 | 返回格式，`url`（默认）或 `b64_json` |
+| `user` | string | 否 | 用户标识符，用于监控和检测滥用 |
+
+### 响应格式
+
+```json
+{
+  "created": 1702486395,
+  "data": [
+    {
+      "url": "https://..."
+    }
+  ]
+}
+```
+
+## 使用示例
+
+### Python 示例
+
+```python
+import openai
+import requests
+from PIL import Image
+from io import BytesIO
+
+# 配置
+openai.api_base = "https://api.apiyi.com/v1"
+openai.api_key = "your-api-key"
+
+# 生成图像
+def generate_image(prompt, size="1024x1024", n=1):
+    try:
+        response = openai.Image.create(
+            model="gpt-image-1",
+            prompt=prompt,
+            n=n,
+            size=size
+        )
+        
+        # 返回图像 URLs
+        return [item['url'] for item in response['data']]
+    
+    except Exception as e:
+        print(f"Error generating image: {e}")
+        return None
+
+# 下载并保存图像
+def save_image(url, filename):
+    response = requests.get(url)
+    img = Image.open(BytesIO(response.content))
+    img.save(filename)
+    print(f"Image saved as {filename}")
+
+# 使用示例
+prompts = [
+    "A futuristic city with flying cars and neon lights",
+    "A cozy coffee shop in autumn with warm lighting",
+    "An abstract art piece with vibrant colors and geometric shapes"
+]
+
+for i, prompt in enumerate(prompts):
+    print(f"Generating: {prompt}")
+    urls = generate_image(prompt)
+    if urls:
+        save_image(urls[0], f"image_{i+1}.png")
+```
+
+### Node.js 示例
+
+```javascript
+const OpenAI = require('openai');
+const fs = require('fs');
+const https = require('https');
+
+// 初始化客户端
+const openai = new OpenAI({
+  apiKey: 'your-api-key',
+  baseURL: 'https://api.apiyi.com/v1'
+});
+
+// 生成图像
+async function generateImage(prompt) {
+  try {
+    const response = await openai.images.generate({
+      model: "gpt-image-1",
+      prompt: prompt,
+      n: 1,
+      size: "1024x1024"
+    });
+    
+    return response.data[0].url;
+  } catch (error) {
+    console.error('Error generating image:', error);
+    return null;
+  }
+}
+
+// 下载图像
+function downloadImage(url, filepath) {
+  return new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(filepath);
+    https.get(url, (response) => {
+      response.pipe(file);
+      file.on('finish', () => {
+        file.close();
+        console.log(`Image saved to ${filepath}`);
+        resolve();
+      });
+    }).on('error', reject);
+  });
+}
+
+// 使用示例
+async function main() {
+  const prompt = "A beautiful Japanese garden with cherry blossoms";
+  const imageUrl = await generateImage(prompt);
+  
+  if (imageUrl) {
+    await downloadImage(imageUrl, 'japanese_garden.png');
+  }
+}
+
+main();
+```
+
+### cURL 示例
+
+```bash
+curl https://api.apiyi.com/v1/images/generations \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-image-1",
+    "prompt": "A white siamese cat sitting on a windowsill",
+    "n": 1,
+    "size": "1024x1024"
+  }'
+```
+
+## 提示词优化建议
+
+### 1. 详细描述
+
+提供具体、详细的描述以获得更好的结果：
+
+```python
+# 基础提示词
+prompt_basic = "a cat"
+
+# 优化后的提示词
+prompt_detailed = "a fluffy white Persian cat sitting on a vintage velvet cushion, soft natural lighting, professional photography, shallow depth of field"
+```
+
+### 2. 风格指定
+
+明确指定想要的艺术风格：
+
+```python
+styles = [
+    "in the style of Studio Ghibli anime",
+    "photorealistic, professional photography",
+    "digital art, concept art style",
+    "oil painting, impressionist style",
+    "minimalist, flat design illustration"
+]
+```
+
+### 3. 构图和视角
+
+指定构图和视角可以获得更精确的结果：
+
+```python
+compositions = [
+    "close-up portrait, centered composition",
+    "wide angle landscape shot, rule of thirds",
+    "aerial view, bird's eye perspective",
+    "low angle shot, dramatic perspective"
+]
+```
+
+## 批量生成
+
+批量生成多张图像的示例：
+
+```python
+import asyncio
+import aiohttp
+import openai
+
+async def generate_batch_images(prompts, size="1024x1024"):
+    """批量生成图像"""
+    tasks = []
+    
+    async with aiohttp.ClientSession() as session:
+        for prompt in prompts:
+            task = generate_single_image(session, prompt, size)
+            tasks.append(task)
+        
+        results = await asyncio.gather(*tasks)
+    
+    return results
+
+async def generate_single_image(session, prompt, size):
+    """异步生成单张图像"""
+    headers = {
+        "Authorization": f"Bearer {openai.api_key}",
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "model": "gpt-image-1",
+        "prompt": prompt,
+        "n": 1,
+        "size": size
+    }
+    
+    async with session.post(
+        f"{openai.api_base}/images/generations",
+        headers=headers,
+        json=data
+    ) as response:
+        result = await response.json()
+        return {
+            "prompt": prompt,
+            "url": result['data'][0]['url']
+        }
+
+# 使用示例
+prompts = [
+    "A majestic eagle soaring over mountains",
+    "A underwater coral reef teeming with colorful fish",
+    "A cozy cabin in a snowy forest at night",
+    "A bustling Tokyo street with neon signs"
+]
+
+# 运行批量生成
+results = asyncio.run(generate_batch_images(prompts))
+for result in results:
+    print(f"Prompt: {result['prompt']}")
+    print(f"URL: {result['url']}\n")
+```
+
+## 错误处理
+
+### 常见错误码
+
+| 错误码 | 说明 | 解决方案 |
+|--------|------|----------|
+| 400 | 无效的请求参数 | 检查提示词长度和参数格式 |
+| 401 | 认证失败 | 验证 API 密钥是否正确 |
+| 429 | 请求过于频繁 | 降低请求频率或升级套餐 |
+| 500 | 服务器错误 | 稍后重试或联系技术支持 |
+
+### 错误处理示例
+
+```python
+import time
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="your-api-key",
+    base_url="https://api.apiyi.com/v1"
+)
+
+def generate_with_retry(prompt, max_retries=3):
+    """带重试机制的图像生成"""
+    for attempt in range(max_retries):
+        try:
+            response = client.images.generate(
+                model="gpt-image-1",
+                prompt=prompt,
+                n=1,
+                size="1024x1024"
+            )
+            return response.data[0].url
+        
+        except Exception as e:
+            if attempt < max_retries - 1:
+                wait_time = 2 ** attempt  # 指数退避
+                print(f"Error: {e}. Retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+            else:
+                print(f"Failed after {max_retries} attempts: {e}")
+                return None
+```
+
+## 最佳实践
+
+### 1. 提示词长度控制
+
+虽然支持最长 1000 字符，但通常 100-200 字符的详细描述就能获得很好的效果。
+
+### 2. 图像尺寸选择
+
+- `256x256`：适合缩略图、图标
+- `512x512`：适合社交媒体分享
+- `1024x1024`：适合高质量展示、打印
+
+### 3. 内容审核
+
+生成的图像会自动进行内容审核，确保符合使用政策。避免请求生成以下内容：
+
+- 暴力或令人不安的图像
+- 成人内容
+- 仇恨或歧视性内容
+- 误导性或虚假信息
+- 侵犯版权的内容
+
+### 4. 成本优化
+
+- 使用较小的尺寸进行测试和预览
+- 批量生成时合理设置并发数量
+- 缓存生成的图像 URL，避免重复生成
+
+## 与 DALL·E 的区别
+
+| 特性 | GPT-Image-1 | DALL·E 3 |
+|------|-------------|----------|
+| 价格 | $0.01/张 | $0.040-$0.080/张 |
+| 生成速度 | 快速 | 中等 |
+| 图像质量 | 高质量 | 顶级质量 |
+| API 格式 | OpenAI 标准 | OpenAI 标准 |
+| 提示词理解 | 优秀 | 卓越 |
+
+## 常见问题
+
+### Q: 生成的图像可以商用吗？
+A: 是的，通过 API 生成的图像您拥有完整的使用权，可以用于商业用途。
+
+### Q: 图像 URL 的有效期是多久？
+A: 生成的图像 URL 通常有效期为 24 小时，建议及时下载保存。
+
+### Q: 支持中文提示词吗？
+A: 支持，但建议使用英文提示词以获得最佳效果。
+
+### Q: 如何提高生成图像的质量？
+A: 使用详细、具体的描述，包括风格、光线、构图等细节。
+
+## 相关资源
+
+- [OpenAI 官方图像生成指南](https://platform.openai.com/docs/guides/images)
+- [API易控制台](https://api.apiyi.com)
+- [技术支持](mailto:support@apiyi.com)
+
+<Note>
+GPT-Image-1 是专为高性价比图像生成而优化的模型，每张图片仅需 $0.01，非常适合大规模应用和测试场景。
+</Note>

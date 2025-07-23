@@ -46,6 +46,12 @@
         "tab": "使用场景",
         "groups": [
           {
+            "group": "概览",
+            "pages": [
+              "scenarios"
+            ]
+          },
+          {
             "group": "对话型 AI",
             "pages": [
               "scenarios/chat/cherry-studio",

@@ -131,7 +131,6 @@
   "primaryTab": {
     "name": "Documentation"
   },
-  "analytics": {},
   "feedback": {
     "thumbsRating": true
   },
@@ -149,13 +148,6 @@
     "twitter:title": "API易文档中心 - 企业级AI大模型API中转站",
     "twitter:description": "支持200+热门AI模型，一个令牌调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。",
     "twitter:image": "/logo/logo.webp"
-  },
-  "integrations": {
-    "analytics": {
-      "ga4": {
-        "measurementId": "G-XXXXXXXXXX"
-      }
-    }
   },
   "redirects": [
     {

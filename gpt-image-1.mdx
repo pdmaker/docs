@@ -17,7 +17,7 @@ GPT-Image-1 支持通过文本提示词生成高质量图像，完全兼容 Open
 
 - 🎨 **高质量图像生成**：生成细节丰富、符合提示词的图像
 - 🚀 **快速响应**：优化的生成速度，快速获得结果  
-- 💰 **极具性价比**：仅需 $0.01/张图片
+- 💰 **按 Token 计费**：输入 $10/M Tokens，输出 $40/M Tokens
 - 🔧 **完全兼容**：100% 兼容 OpenAI Image API 格式
 
 ## 快速开始
@@ -59,9 +59,43 @@ print(f"Generated image URL: {image_url}")
 | `model` | string | 是 | 模型名称，使用 `gpt-image-1` |
 | `prompt` | string | 是 | 图像生成的文本提示词，最长 1000 字符 |
 | `n` | integer | 否 | 生成图像的数量，默认为 1，最大为 10 |
-| `size` | string | 否 | 图像尺寸，支持 `256x256`、`512x512`、`1024x1024`（默认） |
+| `size` | string | 否 | 图像尺寸，支持 `1024x1024`、`1536x1024`、`1024x1536`、`auto`（默认） |
+| `quality` | string | 否 | 渲染质量，支持 `low`、`medium`、`high`、`auto`（默认） |
+| `output_format` | string | 否 | 输出格式，支持 `png`（默认）、`jpeg`、`webp` |
+| `output_compression` | integer | 否 | 压缩级别 (0-100%)，仅适用于 JPEG 和 WebP 格式 |
+| `background` | string | 否 | 背景设置，支持 `transparent`、`opaque`、`auto`（默认） |
 | `response_format` | string | 否 | 返回格式，`url`（默认）或 `b64_json` |
 | `user` | string | 否 | 用户标识符，用于监控和检测滥用 |
+
+### 参数详细说明
+
+#### 尺寸选项 (size)
+- `1024x1024` - 正方形（默认最快生成）
+- `1536x1024` - 横向/风景模式
+- `1024x1536` - 纵向/肖像模式
+- `auto` - 模型根据提示词自动选择最佳尺寸（默认）
+
+#### 质量选项 (quality)
+- `low` - 低质量，生成速度最快
+- `medium` - 中等质量
+- `high` - 高质量，细节最丰富
+- `auto` - 模型根据提示词自动选择（默认）
+
+<Tip>
+**性能提示**：正方形图像 + 标准质量生成速度最快。如果对延迟敏感，建议使用 `jpeg` 格式而非 `png`。
+</Tip>
+
+#### 输出格式 (output_format)
+- `png` - 无损压缩，默认格式
+- `jpeg` - 有损压缩，支持压缩级别，生成速度更快
+- `webp` - 现代格式，文件更小，支持压缩级别
+
+使用 `jpeg` 或 `webp` 时，可通过 `output_compression` 参数控制压缩级别（0-100%）。例如，`output_compression=50` 将压缩图像 50%。
+
+#### 背景选项 (background)
+- `transparent` - 透明背景（适用于 PNG/WebP）
+- `opaque` - 不透明背景
+- `auto` - 模型自动选择（默认）
 
 ### 响应格式
 
@@ -90,14 +124,16 @@ from io import BytesIO
 openai.api_base = "https://api.apiyi.com/v1"
 openai.api_key = "your-api-key"
 
-# 生成图像
-def generate_image(prompt, size="1024x1024", n=1):
+# 生成图像（使用新参数）
+def generate_image(prompt, size="auto", quality="auto", output_format="png", n=1):
     try:
         response = openai.Image.create(
             model="gpt-image-1",
             prompt=prompt,
             n=n,
-            size=size
+            size=size,
+            quality=quality,
+            output_format=output_format
         )
         
         # 返回图像 URLs
@@ -105,6 +141,28 @@ def generate_image(prompt, size="1024x1024", n=1):
     
     except Exception as e:
         print(f"Error generating image: {e}")
+        return None
+
+# 高级示例：使用压缩和背景设置
+def generate_advanced_image(prompt, compression=None):
+    params = {
+        "model": "gpt-image-1",
+        "prompt": prompt,
+        "size": "1536x1024",  # 横向图片
+        "quality": "high",
+        "output_format": "jpeg" if compression else "png",
+        "background": "transparent"
+    }
+    
+    # 如果需要压缩，添加压缩参数
+    if compression:
+        params["output_compression"] = compression
+    
+    try:
+        response = openai.Image.create(**params)
+        return response['data'][0]['url']
+    except Exception as e:
+        print(f"Error: {e}")
         return None
 
 # 下载并保存图像
@@ -141,14 +199,18 @@ const openai = new OpenAI({
   baseURL: 'https://api.apiyi.com/v1'
 });
 
-// 生成图像
-async function generateImage(prompt) {
+// 生成图像（使用新参数）
+async function generateImage(prompt, options = {}) {
   try {
     const response = await openai.images.generate({
       model: "gpt-image-1",
       prompt: prompt,
-      n: 1,
-      size: "1024x1024"
+      n: options.n || 1,
+      size: options.size || "auto",
+      quality: options.quality || "auto",
+      output_format: options.format || "png",
+      background: options.background || "auto",
+      ...options.compression && { output_compression: options.compression }
     });
     
     return response.data[0].url;
@@ -156,6 +218,18 @@ async function generateImage(prompt) {
     console.error('Error generating image:', error);
     return null;
   }
+}
+
+// 高级示例：生成高质量横向图片
+async function generateLandscapeImage(prompt) {
+  const options = {
+    size: "1536x1024",
+    quality: "high",
+    format: "jpeg",
+    compression: 85  // 85% 质量
+  };
+  
+  return await generateImage(prompt, options);
 }
 
 // 下载图像
@@ -353,11 +427,24 @@ def generate_with_retry(prompt, max_retries=3):
 
 虽然支持最长 1000 字符，但通常 100-200 字符的详细描述就能获得很好的效果。
 
-### 2. 图像尺寸选择
+### 2. 图像尺寸和质量选择
 
-- `256x256`：适合缩略图、图标
-- `512x512`：适合社交媒体分享
-- `1024x1024`：适合高质量展示、打印
+**尺寸建议**：
+- `1024x1024`：通用场景，生成速度最快
+- `1536x1024`：横向构图，适合风景、横幅
+- `1024x1536`：纵向构图，适合人像、海报
+- `auto`：让模型根据内容自动选择
+
+**质量建议**：
+- `low`：快速预览、批量生成
+- `medium`：日常使用
+- `high`：专业用途、打印输出
+- `auto`：模型自动优化
+
+**格式选择**：
+- `png`：需要透明背景或无损质量
+- `jpeg`：追求速度和更小文件
+- `webp`：现代 Web 应用，最佳压缩比
 
 ### 3. 内容审核
 
@@ -379,7 +466,7 @@ def generate_with_retry(prompt, max_retries=3):
 
 | 特性 | GPT-Image-1 | Sora Image |
 |------|-------------|----------|
-| 价格 | 约$0.1/张 | $0.01/张 |
+| 价格 | 按Token计费 ($10输入/$40输出 per M) | $0.01/张 |
 | 计费方式 | 按量计费 | 按次计费 |
 | API 类型 | Images API | Chat Completions API |
 | 尺寸支持 | 256x256, 512x512, 1024x1024 | 2:3, 3:2, 1:1 比例 |
@@ -406,5 +493,5 @@ A: 使用详细、具体的描述，包括风格、光线、构图等细节。
 - [技术支持](mailto:support@apiyi.com)
 
 <Note>
-GPT-Image-1 是专为高性价比图像生成而优化的模型，每张图片仅需 $0.01，非常适合大规模应用和测试场景。
+GPT-Image-1 采用按 Token 计费模式（输入 $10/M Tokens，输出 $40/M Tokens），实际成本取决于提示词长度和响应内容。相比固定价格的 Sora Image（$0.01/张），更适合需要灵活控制成本的场景。
 </Note>

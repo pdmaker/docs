@@ -10,7 +10,7 @@ Sora Image 是基于 sora.chatgpt.com 官网逆向技术的图像生成 API，�
 
 <Note>
 **💰 超值价格**  
-按次计费，每张图片仅需 $0.01，与 GPT-Image-1 价格相同，但使用更灵活的对话接口！
+按次计费，每张图片仅需 $0.01！相比 GPT-Image-1 的按 Token 计费（$10输入/$40输出 per M Tokens），价格更透明、可预测！
 </Note>
 
 ## 🌟 核心特性
@@ -29,10 +29,10 @@ Sora Image 是基于 sora.chatgpt.com 官网逆向技术的图像生成 API，�
 | **GPT-4o Image** | `gpt-4o-image` | 按次计费 | $0.01/张 | 同源技术，效果相似 |
 
 <Tip>
-💡 **价格对比**  
-- GPT-Image-1: $0.01/张（官方 Images API）
-- Sora Image: $0.01/张（对话补全 API）
-- 价格相同，接口更灵活！
+💡 **价格优势**  
+- GPT-Image-1: 按 Token 计费（$10输入/$40输出 per M Tokens）
+- Sora Image: 固定 $0.01/张（无论提示词长度）
+- Sora 价格更透明、可预测！
 </Tip>
 
 ## 🚀 快速开始
@@ -300,16 +300,18 @@ def calculate_cost(num_images):
     total_cost = num_images * cost_per_image
     
     # 与 GPT-Image-1 对比
-    gpt_image_1_cost = num_images * 0.01  # GPT-Image-1 价格
+    # GPT-Image-1 按 Token 计费，假设平均每张图约 1000 tokens
+    avg_tokens_per_image = 1000
+    gpt_image_1_cost = num_images * (avg_tokens_per_image / 1_000_000) * 40  # 输出 token费用
     
     print(f"Sora Image 成本计算:")
     print(f"- 图片数量: {num_images}")
-    print(f"- 单价: ${cost_per_image}")
+    print(f"- 单价: ${cost_per_image} (固定价格)")
     print(f"- 总成本: ${total_cost:.2f}")
     print(f"\n对比 GPT-Image-1:")
-    print(f"- GPT-Image-1 成本: ${gpt_image_1_cost:.2f}")
-    print(f"- 价格相同: 都是 $0.01/张")
-    print(f"- 优势: Sora 使用对话接口，更灵活")
+    print(f"- GPT-Image-1 计费: 按Token ($10输入/$40输出 per M)")
+    print(f"- 预估成本: ${gpt_image_1_cost:.2f} (假设每张~1000 tokens)")
+    print(f"- Sora 优势: 固定价格，成本可控")
 
 # 计算示例
 calculate_cost(100)  # 生成 100 张图片
@@ -328,7 +330,7 @@ calculate_cost(100)  # 生成 100 张图片
 A: Sora Image 采用逆向技术优化，降低了中间成本，让利给用户。
 
 ### Q: 图片质量如何？
-A: 基于 Sora 官网同源技术，质量优秀，适合大部分商用场景。与 GPT-Image-1 相比，使用对话接口更加灵活。
+A: 基于 Sora 官网同源技术，质量优秀，适合大部分商用场景。相比 GPT-Image-1 的按 Token 计费，Sora Image 的固定价格更易于预算控制。
 
 ### Q: 支持哪些语言？
 A: 完美支持中文和英文提示词，中文效果已经过优化。

@@ -37,10 +37,12 @@
               "api-capabilities/openai-sdk",
               "api-capabilities/openai-responses",
               "api-capabilities/vision-understanding",
+              "api-capabilities/flux-image-generation",
+              "api-capabilities/flux-image-edit",
               "api-capabilities/sora-image-generation",
               "api-capabilities/sora-image-edit",
-              "gpt-image-1",
-              "image-edit"
+              "api-capabilities/gpt-image-1",
+              "api-capabilities/image-edit"
             ]
           }
         ]

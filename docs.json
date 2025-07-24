@@ -36,6 +36,7 @@
               "api-capabilities/model-info",
               "api-capabilities/openai-sdk",
               "api-capabilities/openai-responses",
+              "api-capabilities/vision-understanding",
               "gpt-image-1",
               "image-edit"
             ]

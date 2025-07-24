@@ -14,7 +14,7 @@ icon: "rocket"
 
 访问 [API易官网](https://vip.apiyi.com) 注册账号：
 
-- 使用邮箱注册
+- 使用邮箱注册（推荐高校、企业邮箱注册）
 - 验证邮箱地址
 - 登录控制台
 
@@ -23,35 +23,28 @@ icon: "rocket"
 在控制台进行充值：
 
 1. 点击"充值"菜单
-2. 选择充值金额
+2. 选择充值金额（最低 5 美金起，100 美金可加赠 15%）
 3. 完成支付（支持支付宝、微信）
 
 <Note>
-新用户首次充值可获得额外赠送，充值后余额立即到账。
+新用户首次充值可获得额外赠送，充值后余额立即到账，首充加赠额度需要加工作人员微信后为你人工加赠（微信：8765058）。
 </Note>
 
 ## 第二步：创建 API 密钥
 
 ### 2.1 生成密钥
 
-1. 在控制台点击"API Keys"
-2. 点击"创建密钥"按钮
-3. 为密钥命名（如：test-key）
-4. 点击确认创建
-
-### 2.2 保存密钥
-
-<Warning>
-API 密钥只显示一次，请立即复制并安全保存。密钥格式：`sk-xxxxxxxxxxxxxxxx`
-</Warning>
+1. 在后台导航点击"令牌"栏目，https://api.apiyi.com/token
+2. 可以复制【默认令牌】直接使用（右侧有个 复制 图标）
+2. 或者新创建令牌：点击右上侧"新增"按钮，为密钥命名（如：test-key），点击确认创建，即拥有新的令牌。
 
 ## 第三步：开始调用
 
 ### 3.1 获取接入信息
 
-- **API 地址**：`https://api.apiyi.com`
+- **API 地址（所谓的 Base_Url）**：`https://api.apiyi.com`
 - **API 密钥**：您刚创建的密钥
-- **请求格式**：完全兼容 OpenAI API
+- **请求格式**：完全兼容 OpenAI API，兼容 OpenAI 格式调用。
 
 ### 3.2 测试调用
 
@@ -62,7 +55,7 @@ curl https://api.apiyi.com/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
-    "model": "gpt-3.5-turbo",
+    "model": "gpt-4.1-mini",
     "messages": [{"role": "user", "content": "Hello!"}]
   }'
 ```
@@ -80,7 +73,7 @@ curl https://api.apiyi.com/v1/chat/completions \
     )
     
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4.1-mini",
         messages=[
             {"role": "user", "content": "Hello!"}
         ]
@@ -100,7 +93,7 @@ curl https://api.apiyi.com/v1/chat/completions \
     });
     
     const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4.1-mini',
       messages: [{ role: 'user', content: 'Hello!' }]
     });
     
@@ -118,7 +111,7 @@ curl https://api.apiyi.com/v1/chat/completions \
     );
     
     ChatCompletionRequest request = ChatCompletionRequest.builder()
-        .model("gpt-3.5-turbo")
+        .model("gpt-4.1-mini")
         .messages(List.of(
             new ChatMessage(ChatMessageRole.USER, "Hello!")
         ))
@@ -147,7 +140,7 @@ curl https://api.apiyi.com/v1/chat/completions \
     将 API易 集成到各种工具
   </Card>
   
-  <Card title="查看使用统计" icon="chart-line" href="https://vip.apiyi.com">
+  <Card title="查看使用统计" icon="chart-line" href="https://api.apiyi.com/log">
     在控制台监控使用情况
   </Card>
 </CardGroup>
@@ -160,9 +153,9 @@ curl https://api.apiyi.com/v1/chat/completions \
 
 ```json
 {
-  "model": "gpt-4",           // 使用 GPT-4
-  "model": "claude-3-opus",   // 使用 Claude 3
-  "model": "gemini-pro"       // 使用 Gemini Pro
+  "model": "gpt-4.1",           // 使用 GPT-4.1
+  "model": "claude-sonnet-4-20250514",   // 使用 Claude 4 Sonnet
+  "model": "gemini-2.5-pro"       // 使用 Gemini 2.5 Pro
 }
 ```
 
@@ -181,7 +174,7 @@ API易 兼容 OpenAI API 标准，支持所有 OpenAI SDK 支持的语言：
 
 ### 如何查看余额？
 
-登录 [控制台](https://vip.apiyi.com) 即可查看：
+登录 [控制台](https://api.apiyi.com/account/profile) 即可查看：
 - 账户余额
 - 使用记录
 - 消费统计
@@ -193,5 +186,6 @@ API易 兼容 OpenAI API 标准，支持所有 OpenAI SDK 支持的语言：
 3. 联系客服：support@apiyi.com
 
 <Info>
-提示：保存好您的 API 密钥，并定期在控制台查看使用情况，合理控制成本。
+提示：保存好您的 API 密钥，并定期在控制台查看使用日志，每笔请求都有消息历史，合理优化成本。
+祝使用愉快~
 </Info>

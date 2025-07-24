@@ -375,15 +375,15 @@ def generate_with_retry(prompt, max_retries=3):
 - 批量生成时合理设置并发数量
 - 缓存生成的图像 URL，避免重复生成
 
-## 与 DALL·E 的区别
+## 与 Sora Image 的区别
 
-| 特性 | GPT-Image-1 | DALL·E 3 |
+| 特性 | GPT-Image-1 | Sora Image |
 |------|-------------|----------|
-| 价格 | $0.01/张 | $0.040-$0.080/张 |
-| 生成速度 | 快速 | 中等 |
-| 图像质量 | 高质量 | 顶级质量 |
-| API 格式 | OpenAI 标准 | OpenAI 标准 |
-| 提示词理解 | 优秀 | 卓越 |
+| 价格 | 约$0.1/张 | $0.01/张 |
+| 计费方式 | 按量计费 | 按次计费 |
+| API 类型 | Images API | Chat Completions API |
+| 尺寸支持 | 256x256, 512x512, 1024x1024 | 2:3, 3:2, 1:1 比例 |
+| 响应格式 | URL 或 Base64 | Markdown 格式图片链接 |
 
 ## 常见问题
 

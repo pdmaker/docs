@@ -14,6 +14,9 @@
     "default": "light",
     "isHidden": false
   },
+  "icons": {
+    "library": "lucide"
+  },
   "seo": {
     "indexHiddenPages": false
   },

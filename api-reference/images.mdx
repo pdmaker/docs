@@ -1,84 +1,64 @@
 ---
 title: 'Images API'
-description: 'AI图片生成接口，GPT-4o Image仅$0.01/张'
+description: 'API易图像处理完整指南 - 生成、编辑、理解全覆盖'
 ---
 
 # Images API
 
-API易的图片生成服务支持多种AI图像生成模型，包括OpenAI DALL-E、Flux、Midjourney、Stable Diffusion等。特别是我们的**GPT-4o Image价格屠夫仅$0.01/张**，提供超高性价比的AI图片生成服务。
+API易提供全面的图像处理能力，涵盖图像生成、编辑、理解等多个方面。支持 OpenAI DALL-E、Flux、Sora Image、GPT-Image-1 等多个顶级模型，为您提供最具性价比的图像处理解决方案。
 
-## 🎨 核心优势
+## 🎯 图像处理能力概览
 
 <CardGroup cols={2}>
   <Card
-    title="价格屠夫"
-    icon="dollar-sign"
-    href="#gpt-4o-image"
+    title="文生图"
+    icon="wand-magic-sparkles"
   >
-    GPT-4o Image仅$0.01/张，比官方便宜数倍
+    通过文字描述生成高质量图像，支持多种风格和尺寸
   </Card>
   <Card
-    title="多模型支持"
-    icon="palette"
-    href="#supported-models"
+    title="图像编辑"
+    icon="paintbrush"
   >
-    支持DALL-E、Flux、Midjourney等10+图像模型
+    智能编辑现有图片，支持局部修改和风格转换
   </Card>
   <Card
-    title="高并发支持"
-    icon="zap"
-    href="#performance"
+    title="图像理解"
+    icon="eye"
   >
-    日产数万张图片，支持生产环境大规模使用
+    分析理解图片内容，支持对象识别、OCR和场景描述
   </Card>
   <Card
-    title="即开即用"
-    icon="plug"
-    href="#getting-started"
+    title="多图融合"
+    icon="layer-group"
   >
-    完全兼容OpenAI格式，无需修改代码
+    将多张图片智能融合，创造全新视觉效果
   </Card>
 </CardGroup>
 
-## 接口信息
+## 💰 价格一览
+
+<Note>
+  **超值推荐**：GPT-4o Image 和 Sora Image 仅需 **$0.01/张**，是目前市场上最具性价比的选择！
+</Note>
+
+| 模型 | 文生图价格 | 图像编辑价格 | 特点 |
+|------|-----------|-------------|------|
+| **GPT-4o Image** | $0.01/张 | $0.01/张 | 💥 价格屠夫，质量优秀 |
+| **Sora Image** | $0.01/张 | $0.01/张 | 🚀 极速生成，中文友好 |
+| **DALL-E 3** | $0.04/张 | - | 🎨 OpenAI官方，细节丰富 |
+| **DALL-E 2** | $0.02/张 | $0.02/张 | 📸 经典模型，稳定可靠 |
+| **Flux Pro** | $0.035/张 | - | 🌟 专业级质量 |
+| **Flux Max** | $0.07/张 | $0.07/张 | 👑 最高质量，支持编辑 |
+| **GPT-Image-1** | 按Token计费 | 按Token计费 | 🔧 灵活控制，功能全面 |
+
+## 🚀 文生图 API
+
+### 标准接口格式
+
+所有文生图模型均使用统一的 OpenAI Images API 格式：
 
 **接口地址**：`POST https://api.apiyi.com/v1/images/generations`
-
-**兼容性**：完全兼容OpenAI官方API格式
-
-## 请求参数
-
-### 必需参数
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `model` | string | 图像生成模型，如 `dall-e-3`、`gpt-4o-image` |
-| `prompt` | string | 图像描述提示词，建议使用英文 |
-
-### 可选参数
-
-| 参数 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `n` | integer | 1 | 生成图片数量 (1-10) |
-| `size` | string | "1024x1024" | 图片尺寸 |
-| `quality` | string | "standard" | 图片质量：standard/hd |
-| `style` | string | "vivid" | 图片风格：vivid/natural |
-| `response_format` | string | "url" | 响应格式：url/b64_json |
-| `user` | string | null | 用户标识符 |
-
-### 支持的尺寸
-
-不同模型支持的尺寸规格：
-
-| 模型 | 支持尺寸 |
-|------|----------|
-| DALL-E 3 | 1024x1024, 1024x1792, 1792x1024 |
-| DALL-E 2 | 256x256, 512x512, 1024x1024 |
-| GPT-4o Image | 1024x1024, 1024x1792, 1792x1024 |
-| Flux 系列 | 1024x1024, 768x1344, 1344x768 |
-| Midjourney | 1024x1024, 1152x896, 896x1152 |
-
-## 基础使用示例
 
 <CodeGroup>
 
@@ -88,34 +68,10 @@ curl https://api.apiyi.com/v1/images/generations \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
     "model": "gpt-4o-image",
-    "prompt": "A beautiful sunset over mountains with a lake in the foreground",
+    "prompt": "A serene Japanese garden with cherry blossoms",
     "n": 1,
-    "size": "1024x1024",
-    "quality": "hd"
+    "size": "1024x1024"
   }'
-```
-
-```javascript Node.js
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.apiyi.com/v1'
-});
-
-async function generateImage() {
-  const image = await openai.images.generate({
-    model: 'gpt-4o-image',
-    prompt: 'A beautiful sunset over mountains with a lake in the foreground',
-    n: 1,
-    size: '1024x1024',
-    quality: 'hd'
-  });
-
-  console.log(image.data[0].url);
-}
-
-generateImage();
 ```
 
 ```python Python
@@ -128,510 +84,591 @@ client = OpenAI(
 
 response = client.images.generate(
     model="gpt-4o-image",
-    prompt="A beautiful sunset over mountains with a lake in the foreground",
+    prompt="A serene Japanese garden with cherry blossoms",
     n=1,
-    size="1024x1024",
-    quality="hd"
+    size="1024x1024"
 )
 
 print(response.data[0].url)
 ```
 
-```go Go
-package main
+```javascript Node.js
+import OpenAI from 'openai';
 
-import (
-    "context"
-    "fmt"
-    "github.com/sashabaranov/go-openai"
-)
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.apiyi.com/v1'
+});
 
-func main() {
-    config := openai.DefaultConfig("YOUR_API_KEY")
-    config.BaseURL = "https://api.apiyi.com/v1"
-    
-    client := openai.NewClientWithConfig(config)
-    
-    resp, err := client.CreateImage(
-        context.Background(),
-        openai.ImageRequest{
-            Model:   "gpt-4o-image",
-            Prompt:  "A beautiful sunset over mountains with a lake in the foreground",
-            N:       1,
-            Size:    openai.CreateImageSize1024x1024,
-            Quality: openai.CreateImageQualityHD,
-        },
-    )
-    
-    if err != nil {
-        fmt.Printf("Error: %v\n", err)
-        return
-    }
-    
-    fmt.Println(resp.Data[0].URL)
-}
+const image = await openai.images.generate({
+  model: 'gpt-4o-image',
+  prompt: 'A serene Japanese garden with cherry blossoms',
+  n: 1,
+  size: '1024x1024'
+});
+
+console.log(image.data[0].url);
 ```
 
 </CodeGroup>
 
-## 响应格式
+### 模型详细介绍
 
-### 标准响应
-
-```json
-{
-  "created": 1702855400,
-  "data": [
-    {
-      "url": "https://image-url.com/generated-image.png",
-      "revised_prompt": "A beautiful sunset over mountains with a clear lake in the foreground, painted in vibrant colors with dramatic lighting"
-    }
-  ]
-}
-```
-
-### 响应字段说明
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `created` | integer | 创建时间戳 |
-| `data` | array | 生成的图片数组 |
-| `url` | string | 图片访问链接 |
-| `revised_prompt` | string | 修订后的提示词（部分模型支持） |
-
-## 支持的模型详情
-
-### 🔥 GPT-4o Image (推荐)
+#### 🔥 GPT-4o Image（推荐）
 
 <Note>
-  **价格屠夫**：仅$0.01/张，比官方便宜数倍，质量效果惊人！
+  **价格屠夫**：仅 $0.01/张，同等质量下价格最低！
 </Note>
 
-```json
-{
-  "model": "gpt-4o-image",
-  "prompt": "A futuristic city skyline at night with neon lights",
-  "size": "1024x1024",
-  "quality": "hd"
-}
-```
+- **优势**：极致性价比、质量优秀、生成速度快
+- **支持尺寸**：1024x1024, 1024x1792, 1792x1024
+- **适用场景**：批量生成、日常使用、商业项目
 
-**特点：**
-- ✅ 超低价格：$0.01/张
-- ✅ 高质量输出
-- ✅ 支持多种尺寸
-- ✅ 快速生成
-- ✅ 企业级稳定性
+#### 🚀 Sora Image
 
-### DALL-E 3
-
-OpenAI最新的图像生成模型，擅长理解复杂提示词：
-
-```json
-{
-  "model": "dall-e-3",
-  "prompt": "A serene Japanese garden with cherry blossoms, painted in watercolor style",
-  "size": "1024x1024",
-  "quality": "hd",
-  "style": "vivid"
-}
-```
-
-**价格：** $0.04/张 (1024x1024)
-
-### DALL-E 2
-
-经典的DALL-E模型，性价比较高：
-
-```json
-{
-  "model": "dall-e-2",
-  "prompt": "A cute robot playing with a cat in a sunny garden",
-  "size": "1024x1024"
-}
-```
-
-**价格：** $0.02/张 (1024x1024)
-
-### Flux 系列
-
-<AccordionGroup>
-  <Accordion icon="zap" title="Flux Pro">
-    最高质量的Flux模型
-    
-    ```json
-    {
-      "model": "flux-pro",
-      "prompt": "Portrait of a wise old wizard with magical aura",
-      "size": "1024x1024"
-    }
-    ```
-    
-    **价格：** $0.05/张
-  </Accordion>
-  
-  <Accordion icon="code" title="Flux Dev">
-    开发版本，平衡质量和速度
-    
-    ```json
-    {
-      "model": "flux-dev",
-      "prompt": "A modern abstract art piece with geometric shapes",
-      "size": "1024x1024"
-    }
-    ```
-    
-    **价格：** $0.03/张
-  </Accordion>
-  
-  <Accordion icon="rocket" title="Flux Schnell">
-    快速生成版本
-    
-    ```json
-    {
-      "model": "flux-schnell",
-      "prompt": "A simple line drawing of a flower",
-      "size": "1024x1024"
-    }
-    ```
-    
-    **价格：** $0.01/张
-  </Accordion>
-</AccordionGroup>
-
-### Midjourney 系列
-
-<AccordionGroup>
-  <Accordion icon="palette" title="Midjourney v6">
-    最新版本，艺术性最强
-    
-    ```json
-    {
-      "model": "midjourney-v6",
-      "prompt": "Ethereal fantasy landscape with floating islands and waterfalls",
-      "size": "1024x1024"
-    }
-    ```
-    
-    **价格：** $0.08/张
-  </Accordion>
-  
-  <Accordion icon="image" title="Midjourney v5">
-    经典版本，艺术风格多样
-    
-    ```json
-    {
-      "model": "midjourney-v5",
-      "prompt": "Cyberpunk cityscape with holographic advertisements",
-      "size": "1024x1024"
-    }
-    ```
-    
-    **价格：** $0.06/张
-  </Accordion>
-</AccordionGroup>
-
-### Stable Diffusion 系列
-
-<AccordionGroup>
-  <Accordion icon="wand-magic-sparkles" title="Stable Diffusion XL">
-    高分辨率开源模型
-    
-    ```json
-    {
-      "model": "stable-diffusion-xl",
-      "prompt": "Photorealistic portrait of a person in natural lighting",
-      "size": "1024x1024"
-    }
-    ```
-    
-    **价格：** $0.02/张
-  </Accordion>
-  
-  <Accordion icon="image" title="Stable Diffusion 1.5">
-    经典开源模型
-    
-    ```json
-    {
-      "model": "stable-diffusion-1.5",
-      "prompt": "Cartoon style illustration of a happy dog",
-      "size": "512x512"
-    }
-    ```
-    
-    **价格：** $0.01/张
-  </Accordion>
-</AccordionGroup>
-
-## 提示词优化技巧
-
-### 1. 基础结构
-
-好的提示词通常包含以下元素：
-
-```
-[主体] + [风格] + [环境] + [光照] + [质量描述符]
-```
-
-**示例：**
-```
-A majestic lion (主体) in photorealistic style (风格) standing in African savanna (环境) during golden hour lighting (光照), highly detailed, 8K resolution (质量描述符)
-```
-
-### 2. 风格关键词
-
-<AccordionGroup>
-  <Accordion icon="camera" title="摄影风格">
-    - `photorealistic`, `photograph`, `DSLR`
-    - `portrait photography`, `landscape photography`
-    - `macro photography`, `street photography`
-    - `black and white`, `vintage film`
-  </Accordion>
-  
-  <Accordion icon="palette" title="艺术风格">
-    - `oil painting`, `watercolor`, `digital art`
-    - `impressionist`, `abstract`, `minimalist`
-    - `manga style`, `anime style`, `cartoon`
-    - `sketch`, `pencil drawing`, `charcoal`
-  </Accordion>
-  
-  <Accordion icon="sparkles" title="质量描述符">
-    - `highly detailed`, `ultra realistic`, `8K resolution`
-    - `sharp focus`, `professional lighting`
-    - `award winning`, `masterpiece`
-    - `trending on artstation`
-  </Accordion>
-</AccordionGroup>
-
-### 3. 模型特定优化
+通过逆向技术实现的高性价比方案：
 
 <CodeGroup>
 
-```text DALL-E 3
-# DALL-E 3 擅长理解自然语言描述
-"Create an image of a cozy coffee shop interior on a rainy day, with warm lighting, people reading books, and steam rising from coffee cups. The atmosphere should be peaceful and inviting."
+```python Python
+# Sora Image 使用 Chat Completions API
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": "画一幅美丽的日落海景【3:2】"  # 在末尾指定比例
+    }]
+)
+
+# 从返回的 markdown 中提取图片 URL
+import re
+content = response.choices[0].message.content
+image_url = re.search(r'!\[.*?\]\((.*?)\)', content).group(1)
 ```
 
-```text GPT-4o Image
-# GPT-4o Image 适合简洁有力的描述
-"Modern minimalist bedroom, white walls, natural lighting, scandinavian design, clean lines, wooden furniture, plants"
-```
+```javascript Node.js
+// Sora Image 使用 Chat Completions API
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [{
+    role: 'user',
+    content: '画一幅美丽的日落海景【3:2】'  // 在末尾指定比例
+  }]
+});
 
-```text Midjourney
-# Midjourney 适合艺术化描述
-"ethereal fantasy forest, bioluminescent plants, mystical atmosphere, cinematic lighting, digital art masterpiece --style raw"
-```
-
-```text Flux
-# Flux 适合技术性描述
-"professional product photography, luxury watch on marble surface, studio lighting, high contrast, commercial grade, ultra sharp"
+// 提取图片 URL
+const content = response.choices[0].message.content;
+const imageUrl = content.match(/!\[.*?\]\((.*?)\)/)[1];
 ```
 
 </CodeGroup>
 
-## 批量生成
+- **价格**：$0.01/张（固定价格）
+- **支持比例**：【2:3】、【3:2】、【1:1】
+- **特点**：中文原生支持、秒级生成
 
-生成多张图片进行选择：
+#### 🎨 DALL-E 系列
 
-```json
-{
-  "model": "gpt-4o-image",
-  "prompt": "A serene mountain landscape at sunrise",
-  "n": 4,
-  "size": "1024x1024"
-}
+OpenAI 官方模型，适合追求细节和创意的场景：
+
+```python
+# DALL-E 3 - 最新版本，理解能力强
+response = client.images.generate(
+    model="dall-e-3",
+    prompt="A detailed oil painting of a robot playing chess",
+    size="1024x1024",
+    quality="hd",
+    style="vivid"
+)
+
+# DALL-E 2 - 经典版本，性价比高
+response = client.images.generate(
+    model="dall-e-2",
+    prompt="A minimalist logo design for a tech company",
+    size="512x512"
+)
 ```
+
+#### 🌟 Flux 系列
+
+专业级图像生成，支持灵活的宽高比：
+
+<CodeGroup>
+
+```python Python
+# Flux Pro - 专业质量
+response = client.images.generate(
+    model="black-forest-labs/flux-pro-v1.1",
+    prompt="Professional product photography of a luxury watch",
+    extra_body={
+        "aspect_ratio": "16:9",  # 灵活宽高比
+        "seed": 42,  # 可重现结果
+        "prompt_upsampling": True  # 自动增强提示词
+    }
+)
+
+# Flux Max - 最高质量，支持编辑
+response = client.images.generate(
+    model="black-forest-labs/flux-kontext-max",
+    prompt="Ultra detailed fantasy landscape with dragons",
+    extra_body={
+        "aspect_ratio": "21:9",  # 超宽屏
+        "safety_tolerance": 2
+    }
+)
+```
+
+```javascript Node.js
+// Flux Pro - 专业质量
+const response = await openai.images.generate({
+  model: 'black-forest-labs/flux-pro-v1.1',
+  prompt: 'Professional product photography of a luxury watch',
+  extra_body: {
+    aspect_ratio: '16:9',  // 灵活宽高比
+    seed: 42,  // 可重现结果
+    prompt_upsampling: true  // 自动增强提示词
+  }
+});
+
+// Flux Max - 最高质量
+const response = await openai.images.generate({
+  model: 'black-forest-labs/flux-kontext-max',
+  prompt: 'Ultra detailed fantasy landscape with dragons',
+  extra_body: {
+    aspect_ratio: '21:9',  // 超宽屏
+    safety_tolerance: 2
+  }
+});
+```
+
+</CodeGroup>
 
 <Warning>
-  批量生成会按照单张价格乘以数量计费。建议先生成1-2张测试效果，满意后再批量生成。
+  Flux 生成的图片 URL 仅 10 分钟有效，请及时下载保存！
 </Warning>
 
-## 高级功能
+## 🎨 图像编辑 API
 
-### 图片变体生成
+### OpenAI 标准编辑接口
 
-基于现有图片生成变体（部分模型支持）：
+适用于 DALL-E 2 和 GPT-Image-1：
 
-```json
-{
-  "model": "dall-e-2",
-  "image": "base64_encoded_image_data",
-  "n": 2,
-  "size": "1024x1024"
-}
+<CodeGroup>
+
+```python Python
+# 使用遮罩进行局部编辑
+response = client.images.edit(
+    image=open("original.png", "rb"),
+    mask=open("mask.png", "rb"),  # 白色=编辑区域
+    prompt="A sunflower in the vase",
+    model="dall-e-2",
+    n=1,
+    size="1024x1024"
+)
 ```
 
-### 图片编辑
+```javascript Node.js
+import fs from 'fs';
 
-对现有图片进行局部编辑（部分模型支持）：
-
-```json
-{
-  "model": "dall-e-2",
-  "image": "base64_encoded_image_data",
-  "mask": "base64_encoded_mask_data",
-  "prompt": "A sunflower in the middle of the image",
-  "n": 1,
-  "size": "1024x1024"
-}
+// 使用遮罩进行局部编辑
+const response = await openai.images.edit({
+  image: fs.createReadStream('original.png'),
+  mask: fs.createReadStream('mask.png'),  // 白色=编辑区域
+  prompt: 'A sunflower in the vase',
+  model: 'dall-e-2',
+  n: 1,
+  size: '1024x1024'
+});
 ```
 
-## 性能优化
+</CodeGroup>
 
-### 1. 选择合适的模型
+### Flux 图像编辑
 
-<CardGroup cols={2}>
+支持更灵活的编辑控制：
+
+```python
+# Flux Max 编辑 - 支持在线图片
+response = client.images.edit(
+    image="https://example.com/original.jpg",  # 支持URL
+    mask="https://example.com/mask.png",  # 可选
+    prompt="Transform the car into a futuristic hovering vehicle",
+    model="black-forest-labs/flux-kontext-max",
+    extra_body={
+        "aspect_ratio": "16:9"
+    }
+)
+```
+
+### Sora Image 编辑
+
+通过 Chat API 实现图像编辑和多图融合：
+
+<CodeGroup>
+
+```python Python
+# 单图编辑
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "将这张图片变成水彩画风格"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/photo.jpg"}}
+        ]
+    }]
+)
+
+# 多图融合
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "将这两张图片的风格和内容融合"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/style.jpg"}},
+            {"type": "image_url", "image_url": {"url": "https://example.com/content.jpg"}}
+        ]
+    }]
+)
+```
+
+```javascript Node.js
+// 单图编辑
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [{
+    role: 'user',
+    content: [
+      { type: 'text', text: '将这张图片变成水彩画风格' },
+      { type: 'image_url', image_url: { url: 'https://example.com/photo.jpg' }}
+    ]
+  }]
+});
+
+// 多图融合
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [{
+    role: 'user',
+    content: [
+      { type: 'text', text: '将这两张图片的风格和内容融合' },
+      { type: 'image_url', image_url: { url: 'https://example.com/style.jpg' }},
+      { type: 'image_url', image_url: { url: 'https://example.com/content.jpg' }}
+    ]
+  }]
+});
+```
+
+</CodeGroup>
+
+## 👁️ 图像理解 API
+
+使用 Chat Completions API 分析和理解图片内容：
+
+<CodeGroup>
+
+```python Python
+# 基础图像分析
+response = client.chat.completions.create(
+    model="gpt-4o",  # 或 gemini-2.5-pro、claude-3-5-sonnet
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "请详细描述这张图片的内容"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/image.jpg"}}
+        ]
+    }]
+)
+
+# OCR 文字识别
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "请提取图片中的所有文字"},
+            {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,..."}}
+        ]
+    }]
+)
+
+# 多图对比分析
+response = client.chat.completions.create(
+    model="gemini-2.5-pro",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "比较这两张图片的差异"},
+            {"type": "image_url", "image_url": {"url": "image1.jpg"}},
+            {"type": "image_url", "image_url": {"url": "image2.jpg"}}
+        ]
+    }]
+)
+```
+
+```javascript Node.js
+// 基础图像分析
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',  // 或 gemini-2.5-pro、claude-3-5-sonnet
+  messages: [{
+    role: 'user',
+    content: [
+      { type: 'text', text: '请详细描述这张图片的内容' },
+      { type: 'image_url', image_url: { url: 'https://example.com/image.jpg' }}
+    ]
+  }]
+});
+
+// OCR 文字识别
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [{
+    role: 'user',
+    content: [
+      { type: 'text', text: '请提取图片中的所有文字' },
+      { type: 'image_url', image_url: { url: 'data:image/jpeg;base64,...' }}
+    ]
+  }]
+});
+```
+
+</CodeGroup>
+
+### 推荐模型对比
+
+| 模型 | 优势 | 适用场景 |
+|------|------|----------|
+| **GPT-4o** | 综合能力强、速度快 | 通用分析、OCR |
+| **Gemini 2.5 Pro** | 2M上下文、细节识别 | 复杂文档、多图分析 |
+| **Claude 3.5 Sonnet** | 逻辑推理强 | 图表分析、技术图纸 |
+
+## 🎯 选择指南
+
+### 按预算选择
+
+<CardGroup cols={3}>
   <Card
-    title="追求性价比"
+    title="超低预算"
     icon="dollar-sign"
   >
-    推荐：GPT-4o Image ($0.01)、Flux Schnell ($0.01)
+    **推荐**：Sora Image、GPT-4o Image
+    
+    固定 $0.01/张，适合大批量使用
   </Card>
   <Card
-    title="追求质量"
-    icon="star"
+    title="平衡选择"
+    icon="scale-balanced"
   >
-    推荐：DALL-E 3 ($0.04)、Flux Pro ($0.05)
+    **推荐**：DALL-E 2、Flux Pro
+    
+    $0.02-0.035/张，质量与价格平衡
   </Card>
   <Card
-    title="艺术创作"
-    icon="palette"
+    title="追求品质"
+    icon="gem"
   >
-    推荐：Midjourney v6 ($0.08)、Midjourney v5 ($0.06)
-  </Card>
-  <Card
-    title="快速原型"
-    icon="zap"
-  >
-    推荐：GPT-4o Image、Stable Diffusion 1.5
+    **推荐**：DALL-E 3、Flux Max
+    
+    $0.04-0.07/张，专业级输出
   </Card>
 </CardGroup>
 
-### 2. 并发请求
+### 按用途选择
 
-API易支持高并发图片生成：
+| 使用场景 | 推荐模型 | 原因 |
+|----------|----------|------|
+| **电商产品图** | GPT-4o Image | 性价比高，质量稳定 |
+| **艺术创作** | DALL-E 3、Flux Max | 创意理解强，细节丰富 |
+| **批量生成** | Sora Image | 价格最低，速度快 |
+| **社交媒体** | Flux Pro | 风格多样，比例灵活 |
+| **图片编辑** | Flux Max、Sora Edit | 编辑能力强，支持多图 |
+| **内容分析** | GPT-4o、Gemini 2.5 | 理解准确，中文友好 |
 
-```python
+## 💡 最佳实践
+
+### 1. 提示词优化
+
+<AccordionGroup>
+  <Accordion icon="lightbulb" title="基础框架">
+    ```
+    [主体描述] + [艺术风格] + [环境设置] + [光照效果] + [质量修饰词]
+    ```
+    
+    示例：
+    ```
+    A majestic eagle (主体) in photorealistic style (风格) 
+    soaring above mountain peaks (环境) during golden hour (光照) 
+    highly detailed, 8K resolution (质量)
+    ```
+  </Accordion>
+  
+  <Accordion icon="language" title="中英文使用">
+    - **英文提示词**：所有模型都支持，表达更精确
+    - **中文提示词**：Sora Image 原生支持，其他模型也能理解但效果可能略差
+    - **建议**：专业场景用英文，日常使用可用中文
+  </Accordion>
+</AccordionGroup>
+
+### 2. 批量处理示例
+
+<CodeGroup>
+
+```python 标准Images API
 import asyncio
-import aiohttp
+from openai import AsyncOpenAI
 
-async def generate_image(session, prompt):
-    async with session.post(
-        'https://api.apiyi.com/v1/images/generations',
-        headers={'Authorization': 'Bearer YOUR_API_KEY'},
-        json={
-            'model': 'gpt-4o-image',
-            'prompt': prompt,
-            'size': '1024x1024'
-        }
-    ) as response:
-        return await response.json()
+client = AsyncOpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.apiyi.com/v1"
+)
 
-async def batch_generate():
-    prompts = [
-        "A cat sitting on a windowsill",
-        "A dog playing in a park",
-        "A bird flying in the sky"
-    ]
+async def generate_batch_images(prompts):
+    tasks = []
+    for prompt in prompts:
+        task = client.images.generate(
+            model="dall-e-3",
+            prompt=prompt,
+            n=1
+        )
+        tasks.append(task)
     
-    async with aiohttp.ClientSession() as session:
-        tasks = [generate_image(session, prompt) for prompt in prompts]
-        results = await asyncio.gather(*tasks)
-    
-    return results
+    results = await asyncio.gather(*tasks)
+    return [r.data[0].url for r in results]
+
+# 使用示例
+prompts = [
+    "A cute cat playing with yarn",
+    "A dog running in the park",
+    "A bird sitting on a branch"
+]
+
+urls = await generate_batch_images(prompts)
 ```
 
-## 价格对比
+```python 逆向生成API
+import asyncio
+import re
+from openai import AsyncOpenAI
 
-| 模型 | API易价格 | 官方价格 | 节省比例 |
-|------|-----------|----------|----------|
-| GPT-4o Image | $0.01/张 | 无官方对应 | - |
-| DALL-E 3 (1024x1024) | $0.04/张 | $0.04/张 | 持平 |
-| DALL-E 2 (1024x1024) | $0.02/张 | $0.02/张 | 持平 |
-| Flux Pro | $0.05/张 | $0.10/张+ | 50%+ |
-| Midjourney v6 | $0.08/张 | $0.12/张+ | 33%+ |
+client = AsyncOpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.apiyi.com/v1"
+)
 
-<Note>
-  价格可能因供应商调整而变化，最新价格以控制台显示为准。
-</Note>
+async def generate_batch_chat(prompts):
+    tasks = []
+    for prompt in prompts:
+        task = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": f"生成图片：{prompt}"}]
+        )
+        tasks.append(task)
+    
+    results = await asyncio.gather(*tasks)
+    urls = []
+    for result in results:
+        content = result.choices[0].message.content
+        url = re.search(r'!\[.*?\]\((.*?)\)', content).group(1)
+        urls.append(url)
+    
+    return urls
 
-## 错误处理
+# 使用示例（GPT-4o Image / Sora Image）
+prompts = [
+    "一只可爱的猫咪在玩毛线球",
+    "一只狗在公园里奔跑",
+    "一只鸟停在树枝上"
+]
 
-### 常见错误
+urls = await generate_batch_chat(prompts)
+```
+
+</CodeGroup>
+
+### 3. 图片下载保存
+
+<Warning>
+  部分模型（如 Flux）生成的 URL 有时效性，建议立即下载保存！
+</Warning>
+
+```python
+import requests
+from datetime import datetime
+
+def download_and_save(image_url, prefix="image"):
+    response = requests.get(image_url)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{prefix}_{timestamp}.png"
+    
+    with open(filename, 'wb') as f:
+        f.write(response.content)
+    
+    return filename
+
+# 生成并保存（标准API）
+response = client.images.generate(
+    model="flux-pro-v1.1",
+    prompt="Beautiful sunset"
+)
+saved_file = download_and_save(response.data[0].url, "sunset")
+print(f"Image saved as: {saved_file}")
+
+# 生成并保存（逆向API - GPT-4o Image/Sora Image）
+import re
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "生成美丽的日落图片"}]
+)
+content = response.choices[0].message.content
+image_url = re.search(r'!\[.*?\]\((.*?)\)', content).group(1)
+saved_file = download_and_save(image_url, "sunset")
+print(f"Image saved as: {saved_file}")
+```
+
+## 🔧 错误处理
+
+### 常见错误码
 
 | 错误码 | 说明 | 解决方案 |
 |--------|------|----------|
-| 400 | 提示词违规或参数错误 | 检查提示词内容和参数格式 |
-| 401 | API Key无效 | 验证API Key是否正确 |
-| 429 | 请求过于频繁 | 降低请求频率，使用队列处理 |
+| 400 | 参数错误或内容违规 | 检查参数格式和提示词内容 |
+| 401 | API Key 无效 | 验证 API Key 是否正确 |
+| 429 | 请求频率过高 | 降低请求频率，使用队列 |
 | 500 | 服务器错误 | 稍后重试或联系支持 |
 
 ### 内容政策
 
-为确保服务稳定，请避免生成以下内容：
-- 暴力、血腥内容
-- 政治敏感内容
-- 色情、成人内容
-- 侵犯版权的内容
-- 涉及真实人物的不当内容
+请避免生成以下内容：
+- ❌ 暴力、血腥内容
+- ❌ 成人、色情内容  
+- ❌ 政治敏感内容
+- ❌ 侵犯版权内容
+- ❌ 涉及真实人物的不当内容
 
-## 最佳实践
+## 📊 使用统计
 
-1. **提示词优化**：使用清晰、具体的描述
-2. **模型选择**：根据需求选择合适的模型
-3. **批量处理**：使用异步请求提高效率
-4. **成本控制**：优先使用性价比高的模型
-5. **质量把控**：生成多张图片进行筛选
-6. **缓存策略**：对重复请求进行缓存
-
-## 使用案例
-
-### 电商产品图
-
-```json
-{
-  "model": "gpt-4o-image",
-  "prompt": "Professional product photography of a modern smartphone on clean white background, studio lighting, commercial quality, highly detailed",
-  "size": "1024x1024",
-  "quality": "hd"
-}
-```
-
-### 社交媒体配图
-
-```json
-{
-  "model": "flux-dev",
-  "prompt": "Inspirational quote background, soft gradient colors, minimalist design, motivational atmosphere, clean typography space",
-  "size": "1024x1024"
-}
-```
-
-### 游戏美术素材
-
-```json
-{
-  "model": "midjourney-v6",
-  "prompt": "Fantasy RPG character concept art, female warrior with magical armor, detailed fantasy art style, game art quality",
-  "size": "1024x1024"
-}
-```
+通过 API易控制台可以查看：
+- 各模型使用量统计
+- 每日/每月生成数量
+- 费用明细和趋势
+- API 调用日志
 
 ---
 
 <CardGroup cols={2}>
   <Card
-    title="开始使用"
+    title="立即开始"
     icon="rocket"
-    href="/quickstart"
+    href="/getting-started"
   >
-    快速上手API易，开始生成你的第一张AI图片
+    注册获取 API Key，开始您的图像创作之旅
   </Card>
   <Card
-    title="查看价格"
-    icon="dollar-sign"
-    href="https://api.apiyi.com/#pricing"
+    title="查看示例代码"
+    icon="code"
+    href="/code-demo"
   >
-    查看详细的图片生成价格表和优惠政策
+    更多编程语言示例和完整项目代码
   </Card>
-</CardGroup> 
+</CardGroup>

@@ -16,19 +16,80 @@ Cursor 是一款 AI 驱动的代码编辑器，通过集成 API易，您可以�
 
 ### 2. 配置 API
 
-- **OpenAI API Key**：输入您的 API易 密钥
+- **OpenAI API Key**：输入您的 API易 密钥（直接用默认令牌即可）
 - **Override OpenAI Base URL**：勾选并输入 `https://api.apiyi.com/v1`
 - 点击 **Verify** 验证配置
 
+![Cursor 配置界面](/images/cursor-setting.png)
+
+
 ### 3. 模型配置
 
-#### 使用 GPT 模型
-默认支持所有 OpenAI 模型：
-- GPT-4, GPT-4-Turbo
-- GPT-3.5-Turbo
+<Warning>
+  **重要说明**：Cursor 目前**不支持 Agent 模式**，只能使用 Chat 聊天对话模式。您可以在对话过程中让 AI 生成代码，然后手动应用到实际代码中。
+  
+  如果您是新手并且非常依赖 Agent 模式进行 Vibe Coding，建议：
+  - 购买 Cursor 官方会员使用其原生服务
+  - 或使用替代方案：VS Code 的 **RooCode** 或 **Cline** 插件（支持 Agent 模式）
+</Warning>
 
-#### 使用 Claude 模型
-添加自定义模型：`claude-3-5-sonnet-20241022`
+#### 推荐模型配置
+
+基于当前最新的模型性能和性价比，推荐以下配置：
+
+**编程首选模型**：
+- `claude-sonnet-4-20250514` - Claude 4 Sonnet，编程能力最强
+- `gpt-4.1` - 速度快，综合能力强
+- `deepseek-v3` - 中文编程优秀，性价比高
+
+**成本优化模型**：
+- `gpt-4.1-mini` - 轻量级但能力不俗
+- `claude-3-haiku` - Claude 系列最便宜
+- `gemini-2.5-flash` - Google 的快速响应模型
+
+**推理增强模型**：
+- `o4-mini` - 编程任务首选的推理模型
+- `o3` - 复杂推理和算法问题
+
+#### 添加自定义模型
+
+在 Cursor 设置中添加以下模型 ID：
+```
+claude-sonnet-4-20250514
+gpt-4.1
+deepseek-v3
+o4-mini
+gemini-2.5-pro
+```
+
+## 使用模式说明
+
+### Chat 模式工作流程
+
+由于 Cursor 不支持 Agent 模式，推荐以下工作流程：
+
+1. **对话生成代码**
+   - 使用 `Ctrl/Cmd + L` 打开聊天
+   - 描述您的需求，让 AI 生成代码
+   - 查看生成的代码片段
+
+2. **手动应用代码**
+   - 从聊天窗口复制代码
+   - 粘贴到目标文件
+   - 或使用 "Apply" 按钮（如果可用）
+
+3. **迭代优化**
+   - 继续对话要求修改
+   - 重复应用过程
+
+### 替代方案对比
+
+| 工具 | Agent 模式 | 优势 | 劣势 |
+|------|-----------|------|------|
+| **Cursor** | ❌ | 界面优雅，补全体验好 | 无 Agent 模式 |
+| **Cline (VS Code)** | ✅ | 完整 Agent 功能，可自动修改文件 | 需要 VS Code |
+| **RooCode (VS Code)** | ✅ | Agent 模式，支持多文件编辑 | 较新，功能还在完善 |
+| **Continue (VS Code)** | ✅ | 开源，可定制性强 | 配置较复杂 |
 
 ## 核心功能
 
@@ -81,11 +142,12 @@ Cursor 是一款 AI 驱动的代码编辑器，通过集成 API易，您可以�
 "修复calculateTotal函数中的浮点数精度问题，确保金额计算准确到小数点后两位"
 ```
 
-### 3. 模型选择建议
+### 3. 充分利用 Chat 模式
 
-- **日常编码**：GPT-3.5-Turbo（快速响应）
-- **复杂逻辑**：GPT-4（质量更高）
-- **代码审查**：Claude-3.5（分析细致）
+虽然没有 Agent 模式，但可以：
+- 让 AI 生成完整的文件内容
+- 要求 AI 提供详细的修改说明
+- 使用 AI 进行代码审查和重构建议
 
 ## 故障排除
 
@@ -112,7 +174,7 @@ Cursor 是一款 AI 驱动的代码编辑器，通过集成 API易，您可以�
 
 ```json
 {
-  "model": "gpt-4",
+  "model": "gpt-4.1",
   "temperature": 0.7,
   "contextFiles": ["README.md", "package.json"],
   "rules": [
@@ -165,4 +227,29 @@ git add .
 4. 最佳实践
 ```
 
-需要更多帮助？请查看 [详细集成文档](/api-reference/integrations/cursor)。
+## 需要 Agent 模式？
+
+如果您需要 AI 能够自动修改多个文件、执行复杂的重构任务，推荐查看：
+
+<CardGroup cols={2}>
+  <Card
+    title="Cline"
+    icon="robot"
+    href="/scenarios/programming/cline"
+  >
+    VS Code 中功能完整的 AI Agent，支持自动修改文件
+  </Card>
+  <Card
+    title="RooCode"
+    icon="code"
+    href="https://marketplace.visualstudio.com/items?itemName=roocode.roocode"
+  >
+    新兴的 VS Code AI Agent 插件，支持多文件编辑
+  </Card>
+</CardGroup>
+
+<Info>
+  **提示**：如果您是 Vibe Coding 爱好者，需要 AI 自主完成复杂编程任务，建议使用支持 Agent 模式的工具，或考虑购买 Cursor 官方会员以获得完整体验。
+</Info>
+
+需要更多帮助？请访问 [API易官网](https://api.apiyi.com) 获取支持。

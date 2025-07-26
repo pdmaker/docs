@@ -793,9 +793,184 @@ A:
 3. 蒙版尺寸与原图不匹配
 4. 提示词包含违规内容
 
+## 🎯 多图编辑解决方案
+
+虽然 Flux API 原生只支持单张图片编辑，但我们提供了**双图片合成编辑**解决方案，特别适合图案转移和风格融合场景。
+
+### 核心优势
+
+<CardGroup cols={2}>
+  <Card title="图案转移" icon="paintbrush">
+    将设计图案精确转移到目标图片上，保持自然融合效果
+  </Card>
+  <Card title="风格融合" icon="palette">
+    结合两张图片的特色元素，创造独特的视觉效果
+  </Card>
+  <Card title="批量处理" icon="layers">
+    支持多对图片的自动化处理，提高工作效率
+  </Card>
+  <Card title="智能合并" icon="merge">
+    自动处理图片尺寸和拼接，确保最佳处理效果
+  </Card>
+</CardGroup>
+
+### 实现原理
+
+1. **图片预处理**：自动下载并统一两张图片的高度
+2. **智能合并**：将参考图和基础图左右拼接成单张图片
+3. **AI 编辑**：使用 Flux Kontext Max 对合并图进行智能处理
+4. **结果输出**：生成融合了两图特征的最终结果
+
+### 快速使用
+
+<CodeGroup>
+
+```bash 下载并运行脚本
+# 下载多图处理脚本
+curl -O https://raw.githubusercontent.com/apiyi-api/ai-api-code-samples/main/flux-Image-API/flux-simple-batch.sh
+chmod +x flux-simple-batch.sh
+
+# 查看使用说明
+./flux-simple-batch.sh --help
+
+# 编辑配置并运行
+# 1. 设置 API_KEY
+# 2. 配置 IMAGE_PAIRS 数组
+# 3. 自定义 BATCH_PROMPT
+./flux-simple-batch.sh
+```
+
+```python Python实现
+import requests
+from PIL import Image
+import io
+import time
+
+def dual_image_edit(reference_url, base_url, prompt, api_key):
+    """双图片编辑：合并后通过Flux进行智能处理"""
+    
+    try:
+        # 1. 下载图片
+        ref_response = requests.get(reference_url)
+        base_response = requests.get(base_url)
+        
+        ref_img = Image.open(io.BytesIO(ref_response.content))
+        base_img = Image.open(io.BytesIO(base_response.content))
+        
+        # 2. 统一高度，保持宽高比
+        target_height = min(ref_img.height, base_img.height)
+        
+        ref_width = int(ref_img.width * target_height / ref_img.height)
+        base_width = int(base_img.width * target_height / base_img.height)
+        
+        ref_resized = ref_img.resize((ref_width, target_height), Image.LANCZOS)
+        base_resized = base_img.resize((base_width, target_height), Image.LANCZOS)
+        
+        # 3. 左右合并
+        total_width = ref_width + base_width
+        merged_img = Image.new('RGB', (total_width, target_height))
+        merged_img.paste(ref_resized, (0, 0))
+        merged_img.paste(base_resized, (ref_width, 0))
+        
+        # 4. 保存临时文件
+        temp_path = f"temp_merged_{int(time.time())}.jpg"
+        merged_img.save(temp_path, quality=95)
+        
+        # 5. 调用 Flux API
+        with open(temp_path, 'rb') as f:
+            response = requests.post(
+                'https://api.apiyi.com/v1/images/edits',
+                headers={'Authorization': f'Bearer {api_key}'},
+                files={'image': f},
+                data={
+                    'model': 'flux-kontext-max',
+                    'prompt': prompt,
+                    'n': 1,
+                    'size': '1024x1024'
+                }
+            )
+        
+        # 6. 获取结果
+        if response.status_code == 200:
+            result_url = response.json()['data'][0]['url']
+            
+            # 立即下载结果（避免10分钟失效）
+            result_response = requests.get(result_url)
+            output_path = f"result_{int(time.time())}.png"
+            with open(output_path, 'wb') as f:
+                f.write(result_response.content)
+            
+            # 清理临时文件
+            import os
+            os.remove(temp_path)
+            
+            return {
+                'success': True,
+                'output_file': output_path,
+                'result_url': result_url
+            }
+        else:
+            return {'success': False, 'error': response.text}
+            
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+# 使用示例
+result = dual_image_edit(
+    reference_url="https://example.com/pattern.jpg",
+    base_url="https://example.com/model.jpg", 
+    prompt="Transfer the pattern from left image to the clothes in right image, make it natural and well-integrated",
+    api_key="your-api-key"
+)
+
+if result['success']:
+    print(f"编辑成功！结果保存为: {result['output_file']}")
+else:
+    print(f"编辑失败: {result['error']}")
+```
+
+</CodeGroup>
+
+### 应用案例
+
+<AccordionGroup>
+  <Accordion icon="shirt" title="服装设计">
+    将图案设计转移到服装模特上，自动调整大小和位置，实现自然的穿着效果
+    
+    ```bash
+    BATCH_PROMPT="Transfer the pattern/design from the left image to the clothes of the model in the right image, with the size being 2/3 of the width of the chest, located in the middle. Make it look natural and well-integrated."
+    ```
+  </Accordion>
+  
+  <Accordion icon="palette" title="艺术创作">
+    结合不同艺术风格的图片，创造独特的混合效果
+    
+    ```bash
+    BATCH_PROMPT="Combine the artistic style from the left image with the subject matter from the right image, creating a harmonious artistic fusion."
+    ```
+  </Accordion>
+  
+  <Accordion icon="building" title="建筑设计">
+    将装饰元素应用到建筑图片上，预览装修效果
+    
+    ```bash
+    BATCH_PROMPT="Apply the decorative elements from the left image to the building in the right image, maintaining architectural harmony."
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+**批量处理提示**：脚本支持一次性处理多对图片，适合批量设计工作。所有结果和中间文件都会自动保存，便于后续使用。
+</Tip>
+
+<Warning>
+**依赖要求**：脚本需要安装 `jq`（JSON处理）、`Python3 + PIL`（图片处理）和可选的 `ImageMagick`。详细安装说明请参考脚本内置帮助。
+</Warning>
+
 ## 🔗 相关资源
 
 - [完整示例代码](https://github.com/apiyi-api/ai-api-code-samples/tree/main/flux-Image-API)
+- [多图处理脚本](https://github.com/apiyi-api/ai-api-code-samples/blob/main/flux-Image-API/flux-simple-batch.sh)
 - [Flux 图像生成 API](/api-capabilities/flux-image-generation) - 文生图功能
 - [蒙版制作教程](https://docs.apiyi.com/tutorials/mask-creation) - 详细制作指南
 - [在线蒙版工具](https://mask.apiyi.com) - 在线制作蒙版

@@ -610,9 +610,116 @@ A:
 2. 使用并发控制，避免处理时间过长
 3. 考虑使用异步处理提高效率
 
+## 🎯 多图处理解决方案
+
+Flux API 原生只支持单张图片输入，但通过我们提供的批量处理脚本，可以实现**双图片合成处理**。
+
+### 应用场景
+
+- **图案转移**：将设计图案转移到服装模特上
+- **风格融合**：结合两张图的特色元素
+- **对比展示**：同时展示原图和目标效果
+
+### 技术原理
+
+<AccordionGroup>
+  <Accordion icon="merge" title="图片合并策略">
+    1. **自动下载**：从 URL 获取两张输入图片
+    2. **智能合并**：使用 Python PIL 将图片左右拼接
+    3. **API 调用**：将合并后的图片作为单一输入
+    4. **结果处理**：AI 基于合并图进行智能处理
+  </Accordion>
+  
+  <Accordion icon="code" title="批量处理能力">
+    - 支持多对图片的自动化处理
+    - 统一的提示词控制处理效果
+    - 自动结果下载和文件管理
+    - 完整的错误处理和日志记录
+  </Accordion>
+</AccordionGroup>
+
+### 快速开始
+
+<CodeGroup>
+
+```bash Shell脚本
+# 下载批量处理脚本
+wget https://raw.githubusercontent.com/apiyi-api/ai-api-code-samples/main/flux-Image-API/flux-simple-batch.sh
+chmod +x flux-simple-batch.sh
+
+# 修改配置
+# 1. 设置您的 API_KEY
+# 2. 配置图片对数组
+# 3. 自定义处理提示词
+
+# 运行批量处理
+./flux-simple-batch.sh
+```
+
+```python Python实现
+import requests
+from PIL import Image
+import io
+
+def merge_and_process(ref_url, base_url, prompt):
+    """合并两张图片并调用Flux处理"""
+    
+    # 下载图片
+    ref_img = Image.open(io.BytesIO(requests.get(ref_url).content))
+    base_img = Image.open(io.BytesIO(requests.get(base_url).content))
+    
+    # 统一高度并左右合并
+    height = min(ref_img.height, base_img.height)
+    ref_resized = ref_img.resize((int(ref_img.width * height / ref_img.height), height))
+    base_resized = base_img.resize((int(base_img.width * height / base_img.height), height))
+    
+    merged = Image.new('RGB', (ref_resized.width + base_resized.width, height))
+    merged.paste(ref_resized, (0, 0))
+    merged.paste(base_resized, (ref_resized.width, 0))
+    
+    # 保存为临时文件
+    merged.save('temp_merged.jpg')
+    
+    # 调用Flux API
+    with open('temp_merged.jpg', 'rb') as f:
+        response = requests.post(
+            'https://api.apiyi.com/v1/images/edits',
+            headers={'Authorization': f'Bearer {API_KEY}'},
+            files={'image': f},
+            data={
+                'model': 'flux-kontext-max',
+                'prompt': prompt,
+                'n': 1,
+                'size': '1024x1024'
+            }
+        )
+    
+    return response.json()['data'][0]['url']
+```
+
+</CodeGroup>
+
+### 配置示例
+
+```bash
+# 提示词配置
+BATCH_PROMPT="Look at the left image and right image. Transfer the pattern/design from the left image to the clothes of the model in the right image, with the size being 2/3 of the width of the chest, located in the middle. Make it look natural and well-integrated."
+
+# 图片对数组
+IMAGE_PAIRS=(
+    "https://example.com/pattern1.jpg|https://example.com/model1.jpg"
+    "https://example.com/design2.jpg|https://example.com/shirt2.jpg"
+)
+```
+
+<Warning>
+**依赖要求**：脚本需要 `jq`、`Python3 + PIL` 和可选的 `ImageMagick`。详细安装说明请参考脚本帮助。
+</Warning>
+
 ## 🔗 相关资源
 
 - [完整示例代码](https://github.com/apiyi-api/ai-api-code-samples/tree/main/flux-Image-API)
+- [多图处理脚本](https://github.com/apiyi-api/ai-api-code-samples/blob/main/flux-Image-API/flux-simple-batch.sh)
 - [Flux 图像编辑 API](/api-capabilities/flux-image-edit) - 编辑现有图片
 - [价格对比计算器](https://api.apiyi.com/account/pricing) - 实时价格查询
 - [在线体验 Demo](https://imagen.apiyi.com) - 测试 Flux 效果
